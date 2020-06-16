@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_pdf/mainScreen.dart';
+import 'views/mainScreen.dart';
 
 void main() {
   runApp(MyApp());
