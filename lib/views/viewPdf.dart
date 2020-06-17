@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
 
 class ViewPdf extends StatefulWidget {
-  String documentPath;
+  final String documentPath;
   ViewPdf({this.documentPath});
   @override
   _ViewPdfState createState() => _ViewPdfState();

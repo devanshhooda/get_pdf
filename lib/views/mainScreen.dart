@@ -13,10 +13,12 @@ class _MainScreenState extends State<MainScreen> {
   FileServices fileServices;
   ImageServices imageServices;
   List<Asset> images;
+  bool selected;
   @override
   void initState() {
     fileServices = FileServices();
     imageServices = ImageServices();
+    selected = false;
     super.initState();
   }
 
@@ -25,6 +27,23 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Get PDF'),
+        actions: <Widget>[
+          selected ? RaisedButton(
+            child: Text("print"),
+            onPressed: () async {
+              await fileServices.createFromImages(images);
+            },
+          ) : Container(),
+          selected ? RaisedButton(
+            child: Icon(Icons.delete_forever),
+            onPressed: () {
+              setState(() {
+                selected = false;
+                images = null;
+              });
+            },
+          ) : Container()
+        ],
       ),
       body: Center(
           child: images == null
@@ -33,6 +52,7 @@ class _MainScreenState extends State<MainScreen> {
                     await imageServices.pickImages().then((imagesList) {
                       setState(() {
                         images = imagesList;
+                        selected = true;
                       });
                     });
                   },
@@ -42,7 +62,8 @@ class _MainScreenState extends State<MainScreen> {
                   itemCount: images.length,
                   itemBuilder: (context, i) {
                     return homePageContent(i);
-                  })),
+                  })
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           try {
