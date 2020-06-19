@@ -10,60 +10,57 @@ import 'package:path_provider/path_provider.dart';
 
 class FileServices {
   String fileName = '';
-  createFile() async {
-    final pdf = pw.Document();
-    pdf.addPage(pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        margin: pw.EdgeInsets.all(30),
-        build: (pw.Context context) {
-          return <pw.Widget>[
-            // pw.Container(
-            //     decoration: pw.BoxDecoration(image: pw.DecorationImage())),
-            pw.Header(
-              child: pw.Text('Carry bhai'),
-            ),
-            pw.Paragraph(
-              text: 'To kaise hain aap log',
-            ),
-            pw.Align(
-                alignment: pw.Alignment.bottomRight,
-                child: pw.Footer(trailing: pw.Text('GetPDF')))
-          ];
-        }));
-    await saveFile(pdf);
-  }
+  // createFile() async {
+  //   final pdf = pw.Document();
+  //   pdf.addPage(pw.MultiPage(
+  //       pageFormat: PdfPageFormat.a4,
+  //       margin: pw.EdgeInsets.all(30),
+  //       build: (pw.Context context) {
+  //         return <pw.Widget>[
+  //           // pw.Container(
+  //           //     decoration: pw.BoxDecoration(image: pw.DecorationImage())),
+  //           pw.Header(
+  //             child: pw.Text('Carry bhai'),
+  //           ),
+  //           pw.Paragraph(
+  //             text: 'To kaise hain aap log',
+  //           ),
+  //           pw.Align(
+  //               alignment: pw.Alignment.bottomRight,
+  //               child: pw.Footer(trailing: pw.Text('GetPDF')))
+  //         ];
+  //       }));
+  //   await saveFile(pdf);
+  // }
+  final pdf = pw.Document();
+  createPdfFromImages(List<Asset> images) async {
+    try {
+      for (int i = 0; i < images.length; i++) {
+        ByteData data = await images[i].getByteData();
+        Codec codec = await instantiateImageCodec(data.buffer.asUint8List());
+        var frame = await codec.getNextFrame();
 
-  createFromImages(List<Asset> images) async {
-    final pdf = pw.Document();
+        var imageBytes = await frame.image.toByteData();
 
-    for (int i=0; i<images.length; i++) {
-      ByteData data = await images[i].getByteData();
-      Codec codec = await instantiateImageCodec(data.buffer.asUint8List());
-      var frame = await codec.getNextFrame();
+        PdfImage image = new PdfImage(pdf.document,
+            image: imageBytes.buffer.asUint8List(),
+            width: images[i].originalWidth,
+            height: images[i].originalHeight);
 
-      var imageBytes = await frame.image.toByteData();
+        pdf.addPage(pw.Page(
+            pageFormat: PdfPageFormat.a4,
+            build: (pw.Context context) {
+              return pw.Container(child: pw.Image(image));
+            }));
+      }
 
-      PdfImage image = new PdfImage(
-          pdf.document,
-          image: imageBytes.buffer.asUint8List(),
-          width: images[i].originalWidth,
-          height: images[i].originalHeight
-      );
-
-      pdf.addPage(pw.Page(
-          pageFormat: PdfPageFormat.a4,
-          build: (pw.Context context) {
-            return pw.Container(
-                child: pw.Image(image)
-            );
-          }
-      ));
+      await savePdfFile();
+    } catch (e) {
+      print(e);
     }
-
-    await saveFile(pdf);
   }
 
-  Future saveFile(pw.Document pdf) async {
+  Future savePdfFile() async {
     Directory dir = await getExternalStorageDirectory();
     String documentPath = dir.path;
 

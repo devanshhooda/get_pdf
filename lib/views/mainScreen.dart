@@ -25,59 +25,71 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Get PDF'),
-        actions: <Widget>[
-          selected ? RaisedButton(
-            child: Text("print"),
-            onPressed: () async {
-              await fileServices.createFromImages(images);
-            },
-          ) : Container(),
-          selected ? RaisedButton(
-            child: Icon(Icons.delete_forever),
-            onPressed: () {
-              setState(() {
-                selected = false;
-                images = null;
-              });
-            },
-          ) : Container()
-        ],
-      ),
-      body: Center(
-          child: images == null
-              ? RaisedButton(
-                  onPressed: () async {
-                    await imageServices.pickImages().then((imagesList) {
+      appBar: AppBar(title: Text('Get PDF'), actions: <Widget>[
+        selected
+            ? IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  setState(() {
+                    selected = false;
+                    images = null;
+                  });
+                })
+            : IconButton(
+                icon: Icon(Icons.add_photo_alternate),
+                onPressed: () async {
+                  await imageServices.pickImages().then((imagesList) {
+                    if (imagesList != null && imagesList.isNotEmpty) {
                       setState(() {
                         images = imagesList;
                         selected = true;
                       });
-                    });
-                  },
-                  child: Text('Get images'),
+                    }
+                  });
+                }),
+      ]),
+      body: Center(
+          child: images == null
+              ? Text(
+                  'No data',
+                  style: TextStyle(color: Colors.white),
                 )
               : ListView.builder(
                   itemCount: images.length,
                   itemBuilder: (context, i) {
                     return homePageContent(i);
-                  })
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          try {
-            await fileServices.createFile();
-          } catch (e) {
-            print(e);
-          }
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ViewPdf(
-                    documentPath: fileServices.fileName,
-                  )));
-        },
-        child: Icon(Icons.add),
-      ),
+                  })),
+      floatingActionButton: selected
+          ?
+          // ? FloatingActionButton(
+          //     onPressed: () {
+          //       print('editing');
+          //     },
+          //     child: Icon(Icons.edit),
+          //   )
+          // :
+          FloatingActionButton(
+              onPressed: () async {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return Container(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    });
+                await fileServices.createPdfFromImages(images);
+                Navigator.of(context).pop();
+                // Navigator.of(context).push(MaterialPageRoute(
+                //     builder: (context) => ViewPdf(
+                //           documentPath: fileServices.fileName,
+                //         )));
+              },
+              child: Icon(Icons.save_alt),
+            )
+          : null,
     );
   }
 
