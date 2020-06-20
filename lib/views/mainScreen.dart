@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get_pdf/services/fileServices.dart';
+import 'package:get_pdf/services/pdfServices.dart';
 import 'package:get_pdf/services/imageServices.dart';
-import 'package:get_pdf/views/viewPdf.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class MainScreen extends StatefulWidget {
@@ -10,13 +9,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  FileServices fileServices;
+  PdfServices pdfServices;
   ImageServices imageServices;
   List<Asset> images;
   bool selected;
   @override
   void initState() {
-    fileServices = FileServices();
+    pdfServices = PdfServices();
     imageServices = ImageServices();
     selected = false;
     super.initState();
@@ -80,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       );
                     });
-                await fileServices.createPdfFromImages(images);
+                await pdfServices.createPdfFromImages(images);
                 Navigator.of(context).pop();
                 // Navigator.of(context).push(MaterialPageRoute(
                 //     builder: (context) => ViewPdf(
