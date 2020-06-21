@@ -30,7 +30,6 @@ class _PreviewPageState extends State<PreviewPage> {
           IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                // widget.imageList.clear();
                 Navigator.of(context).pop();
               })
         ],
@@ -43,7 +42,7 @@ class _PreviewPageState extends State<PreviewPage> {
             itemBuilder: (context, i) {
               return GestureDetector(
                 onTap: () {
-                  // widget.imageList[i] =
+                  print('Editing image process to be done');
                 },
                 child: Container(
                   margin: EdgeInsets.all(5),

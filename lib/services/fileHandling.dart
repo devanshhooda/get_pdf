@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:file/file.dart' as FILE;
 import 'package:file/local.dart';
-import 'package:get_pdf/services/constants.dart';
-import 'package:get_pdf/services/permissions.dart';
+import 'package:get_pdf/utils/constants.dart';
+import 'package:get_pdf/utils/permissions.dart';
 
 class FileHandling {
   final FILE.FileSystem fs = const LocalFileSystem();

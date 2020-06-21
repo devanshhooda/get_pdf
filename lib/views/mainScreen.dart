@@ -30,24 +30,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Get PDF'), actions: <Widget>[
-        IconButton(
-            icon: Icon(Icons.add_photo_alternate),
-            onPressed: () async {
-              await imageServices.pickImages().then((imagesList) {
-                if (imagesList != null && imagesList.isNotEmpty) {
-                  setState(() {
-                    images = imagesList;
-                  });
-                  // imagesList.clear();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PreviewPage(
-                            imageList: images,
-                          )));
-                }
-              });
-            }),
-      ]),
+      appBar: AppBar(
+        title: Text('Get PDF'),
+      ),
       body: Center(
         child: filesPresent
             ? Padding(
@@ -63,11 +48,38 @@ class _MainScreenState extends State<MainScreen> {
                 style: TextStyle(color: Colors.white),
               ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('Camera work to be done');
-        },
-        child: Icon(Icons.photo_camera),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: FloatingActionButton(
+              onPressed: () async {
+                await imageServices.pickImages().then((imagesList) {
+                  if (imagesList != null && imagesList.isNotEmpty) {
+                    setState(() {
+                      images = imagesList;
+                    });
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PreviewPage(
+                              imageList: images,
+                            )));
+                  }
+                });
+              },
+              child: Icon(Icons.add_photo_alternate),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: FloatingActionButton(
+              onPressed: () {
+                print('Camera work to be done');
+              },
+              child: Icon(Icons.photo_camera),
+            ),
+          ),
+        ],
       ),
     );
   }
