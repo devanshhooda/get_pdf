@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_pdf/services/pdfServices.dart';
 import 'package:get_pdf/services/imageServices.dart';
+import 'package:get_pdf/views/viewPdf.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class MainScreen extends StatefulWidget {
@@ -25,27 +26,27 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Get PDF'), actions: <Widget>[
-        selected
-            ? IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
+        selected ? IconButton(
+          icon: Icon(Icons.delete),
+            onPressed: () {
+              setState(() {
+                selected = false;
+                images = null;
+              });
+            }
+          ) : IconButton(
+            icon: Icon(Icons.add_photo_alternate),
+            onPressed: () async {
+              await imageServices.pickImages().then((imagesList) {
+                if (imagesList != null && imagesList.isNotEmpty) {
                   setState(() {
-                    selected = false;
-                    images = null;
+                    images = imagesList;
+                    selected = true;
                   });
-                })
-            : IconButton(
-                icon: Icon(Icons.add_photo_alternate),
-                onPressed: () async {
-                  await imageServices.pickImages().then((imagesList) {
-                    if (imagesList != null && imagesList.isNotEmpty) {
-                      setState(() {
-                        images = imagesList;
-                        selected = true;
-                      });
-                    }
-                  });
-                }),
+                }
+              });
+            }
+          ),
       ]),
       body: Center(
           child: images == null
@@ -70,21 +71,22 @@ class _MainScreenState extends State<MainScreen> {
           FloatingActionButton(
               onPressed: () async {
                 showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      return Container(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    });
-                await pdfServices.createPdfFromImages(images);
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  });
+                String filename = await pdfServices.createPdfFromImages(images);
                 Navigator.of(context).pop();
-                // Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => ViewPdf(
-                //           documentPath: fileServices.fileName,
-                //         )));
+                if (filename == null) return ;
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ViewPdf(
+                    documentPath: filename,
+                )));
               },
               child: Icon(Icons.save_alt),
             )
