@@ -27,15 +27,16 @@ class FileHandling {
     return home.childFile(name);
   }
 
-  List<File> allFiles() {
+  List<FileSystemEntity> allFiles() {
     if (home == null) return null;
     List<FileSystemEntity> list = home.listSync();
-    List<File> files = List<File> ();
+    List<FileSystemEntity> files = List<FileSystemEntity> ();
     for (int i = 0; i < list.length; i++) {
-      if (fs.isDirectorySync(list[i].path)) {
-        files.add(File(list[i].path));
+      if (!fs.isDirectorySync(list[i].path)) {
+        files.add(list[i]);
       }
     }
+    list.clear();
     return files;
   }
 }

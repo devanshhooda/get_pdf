@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:get_pdf/services/file_handling.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:open_file/open_file.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -35,7 +34,7 @@ class PdfServices {
   //   await saveFile(pdf);
   // }
 
-  createPdfFromImages(List<Asset> images) async {
+  Future<String> createPdfFromImages(List<Asset> images) async {
     pdf = pw.Document();
     try {
       for (int i = 0; i < images.length; i++) {
@@ -57,20 +56,24 @@ class PdfServices {
             }));
       }
 
-      await savePdfFile();
+      return await savePdfFile();
     } catch (e) {
       print(e);
+      return null;
     }
   }
 
-  Future<bool> savePdfFile() async {
+  Future<String> savePdfFile() async {
     FileHandling handler = FileHandling();
     await handler.initSystem();
 
+    // List<FileSystemEntity> files = handler.allFiles();
+    // files.forEach((element) {print(element);});
+
     File file = handler.getFile();
-    if (file == null) return false;
+    if (file == null) return null; // Error
     await file.writeAsBytes(pdf.save());
-    OpenFile.open(file.path);
-    return true;
+    print('Saved File: ${file.path}');
+    return file.path;
   }
 }

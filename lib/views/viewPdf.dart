@@ -12,11 +12,11 @@ class _ViewPdfState extends State<ViewPdf> {
   @override
   Widget build(BuildContext context) {
     String path = widget.documentPath;
-    print(path);
+    String name = path.split('/').removeLast();
     return PDFViewerScaffold(
       path: path,
       appBar: AppBar(
-        title: Text('${path.substring(45)}'),
+        title: Text(name),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.save_alt), onPressed: () {}),
           IconButton(icon: Icon(Icons.share), onPressed: () {})
