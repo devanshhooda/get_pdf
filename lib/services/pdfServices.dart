@@ -2,14 +2,16 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/services.dart';
+import 'package:get_pdf/services/file_handling.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:path_provider/path_provider.dart';
 
-class FileServices {
-  String fileName = '';
+class PdfServices {
+
+  var pdf = pw.Document();
+
   // createFile() async {
   //   final pdf = pw.Document();
   //   pdf.addPage(pw.MultiPage(
@@ -32,8 +34,9 @@ class FileServices {
   //       }));
   //   await saveFile(pdf);
   // }
-  final pdf = pw.Document();
+
   createPdfFromImages(List<Asset> images) async {
+    pdf = pw.Document();
     try {
       for (int i = 0; i < images.length; i++) {
         ByteData data = await images[i].getByteData();
@@ -60,16 +63,14 @@ class FileServices {
     }
   }
 
-  Future savePdfFile() async {
-    Directory dir = await getExternalStorageDirectory();
-    String documentPath = dir.path;
+  Future<bool> savePdfFile() async {
+    FileHandling handler = FileHandling();
+    await handler.initSystem();
 
-    DateTime currentTime = DateTime.now();
-    fileName = '$documentPath/GetPDF_${currentTime.toString()}.pdf';
-    File file = File(fileName);
-
+    File file = handler.getFile();
+    if (file == null) return false;
     await file.writeAsBytes(pdf.save());
-
     OpenFile.open(file.path);
+    return true;
   }
 }
