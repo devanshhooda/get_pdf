@@ -18,7 +18,6 @@ class _ViewPdfState extends State<ViewPdf> {
       appBar: AppBar(
         title: Text(name),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.save_alt), onPressed: () {}),
           IconButton(icon: Icon(Icons.share), onPressed: () {})
         ],
       ),

@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:get_pdf/services/pdfServices.dart';
+import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
+import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/viewPdf.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -10,15 +12,18 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  PdfServices pdfServices;
   ImageServices imageServices;
-  List<Asset> images;
-  bool selected;
+  FileHandling handler;
+  List<File> images;
+  bool filesPresent;
+  var files;
+
   @override
   void initState() {
-    pdfServices = PdfServices();
     imageServices = ImageServices();
-    selected = false;
+    handler = FileHandling();
+    initFileSystem();
+    filesPresent = false;
     super.initState();
   }
 
@@ -26,83 +31,80 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Get PDF'), actions: <Widget>[
-        selected ? IconButton(
-          icon: Icon(Icons.delete),
-            onPressed: () {
-              setState(() {
-                selected = false;
-                images = null;
-              });
-            }
-          ) : IconButton(
+        IconButton(
             icon: Icon(Icons.add_photo_alternate),
             onPressed: () async {
               await imageServices.pickImages().then((imagesList) {
                 if (imagesList != null && imagesList.isNotEmpty) {
                   setState(() {
                     images = imagesList;
-                    selected = true;
                   });
+                  // imagesList.clear();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PreviewPage(
+                            imageList: images,
+                          )));
                 }
               });
-            }
-          ),
+            }),
       ]),
       body: Center(
-          child: images == null
-              ? Text(
-                  'No data',
-                  style: TextStyle(color: Colors.white),
-                )
-              : ListView.builder(
-                  itemCount: images.length,
-                  itemBuilder: (context, i) {
-                    return homePageContent(i);
-                  })),
-      floatingActionButton: selected
-          ?
-          // ? FloatingActionButton(
-          //     onPressed: () {
-          //       print('editing');
-          //     },
-          //     child: Icon(Icons.edit),
-          //   )
-          // :
-          FloatingActionButton(
-              onPressed: () async {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) {
-                    return Container(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  });
-                String filename = await pdfServices.createPdfFromImages(images);
-                Navigator.of(context).pop();
-                if (filename == null) return ;
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ViewPdf(
-                    documentPath: filename,
-                )));
-              },
-              child: Icon(Icons.save_alt),
-            )
-          : null,
+        child: filesPresent
+            ? Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: ListView.builder(
+                    itemCount: files.length,
+                    itemBuilder: (context, i) {
+                      return homePageContent(i);
+                    }),
+              )
+            : Text(
+                'No data',
+                style: TextStyle(color: Colors.white),
+              ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('Camera work to be done');
+        },
+        child: Icon(Icons.photo_camera),
+      ),
     );
   }
 
   homePageContent(int i) {
-    return Column(
-      children: <Widget>[
-        AssetThumb(
-            asset: images[i],
-            width: images[i].originalWidth,
-            height: images[i].originalHeight),
-        Divider()
-      ],
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: Colors.redAccent),
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            title: Text('${files[i].basename}'),
+            subtitle: Text('${files[i].dirname}'),
+            onTap: () {
+              String filePath = files[i].path;
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ViewPdf(
+                        documentPath: filePath,
+                      )));
+            },
+          ),
+          Divider()
+        ],
+      ),
     );
+  }
+
+  initFileSystem() async {
+    await handler.initSystem().then((value) {
+      setState(() {
+        files = handler.allFiles();
+        if (files != null && files.isNotEmpty) {
+          filesPresent = true;
+        }
+      });
+    });
   }
 }
