@@ -8,6 +8,7 @@ import 'package:get_pdf/utils/permissions.dart';
 class FileHandling {
   final FILE.FileSystem fs = const LocalFileSystem();
   FILE.Directory homeDirectory;
+  FILE.Directory tempDirectory;
 
   FileHandling();
 
@@ -16,6 +17,7 @@ class FileHandling {
     if (storagePermission && homeDirectory == null) {
       FILE.Directory root = fs.directory(Constants.root);
       homeDirectory = await root.childDirectory(Constants.home).create();
+      tempDirectory = await homeDirectory.childDirectory(Constants.temp).create();
     }
     return storagePermission;
   }
@@ -25,6 +27,18 @@ class FileHandling {
     var postfixString = DateTime.now().millisecondsSinceEpoch.toString();
     if (name == null) name = Constants.base + postfixString + '.pdf';
     return homeDirectory.childFile(name);
+  }
+
+  File getTempFile({String name}) {
+    if (tempDirectory == null) return null;
+    var postfixString = DateTime.now().millisecondsSinceEpoch.toString();
+    if (name == null) name = Constants.base + postfixString + '.pdf';
+    return tempDirectory.childFile(name);
+  }
+
+  Future<void> deleteTemp() async {
+    tempDirectory.deleteSync();
+    tempDirectory = await homeDirectory.childDirectory(Constants.temp).create();
   }
 
   List<FileSystemEntity> allFiles() {
