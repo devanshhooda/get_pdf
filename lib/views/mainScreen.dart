@@ -54,8 +54,10 @@ class _MainScreenState extends State<MainScreen> {
           Padding(
             padding: EdgeInsets.all(5),
             child: FloatingActionButton(
+              heroTag: "gallery",
               onPressed: () async {
                 await imageServices.pickImages().then((imagesList) {
+                  print(imagesList);
                   if (imagesList != null && imagesList.isNotEmpty) {
                     setState(() {
                       images = imagesList;
@@ -73,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
           Padding(
             padding: EdgeInsets.all(5),
             child: FloatingActionButton(
+              heroTag: "camera",
               onPressed: () {
                 print('Camera work to be done');
               },

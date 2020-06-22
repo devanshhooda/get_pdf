@@ -6,7 +6,7 @@ import '../services/pdfServices.dart';
 import 'viewPdf.dart';
 
 class PreviewPage extends StatefulWidget {
-  List<File> imageList;
+  final List<File> imageList;
   PreviewPage({this.imageList});
   @override
   _PreviewPageState createState() => _PreviewPageState();
