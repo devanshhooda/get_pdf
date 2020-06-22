@@ -1,19 +1,16 @@
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 
 class ImageServices {
-  Future<List<Asset>> pickImages() async {
-    List<Asset> imagesList = List<Asset>();
-
+  List<File> imageList = List<File>();
+  Future<List<File>> pickImages() async {
+    List<File> imageList = List<File>();
     try {
-      imagesList = await MultiImagePicker.pickImages(
-          maxImages: 100,
-          selectedAssets: imagesList,
-          enableCamera: true,
-          cupertinoOptions: CupertinoOptions(takePhotoIcon: 'chat'),
-          materialOptions: MaterialOptions(
-              actionBarTitle: 'GetPDF', allViewTitle: 'All photos'));
-      
-      return imagesList;
+      imageList = await FilePicker.getMultiFile(
+        type: FileType.image,
+      );
+      return imageList;
     } catch (e) {
       print(e);
     }
