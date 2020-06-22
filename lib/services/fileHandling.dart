@@ -53,4 +53,8 @@ class FileHandling {
     list.clear();
     return files;
   }
+
+  void deleteFile(FileSystemEntity file) {
+    file.deleteSync(recursive: true);
+  }
 }

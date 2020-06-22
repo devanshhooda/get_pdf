@@ -67,7 +67,6 @@ class _MainScreenState extends State<MainScreen> {
                       builder: (context) => PreviewPage(
                         imageList: images,
                     ))).then((_) {
-                      print('pop from gallery ......');
                       setState(() {
                         files = handler.allFiles();
                         if (files != null && files.isNotEmpty) {
@@ -93,7 +92,6 @@ class _MainScreenState extends State<MainScreen> {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => PreviewPage(imageList: images)
                   )).then((_) {
-                    print('pop from camera ......');
                     setState(() {
                       files = handler.allFiles();
                       if (files != null && files.isNotEmpty) {

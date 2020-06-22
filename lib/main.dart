@@ -1,9 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_pdf/services/fileHandling.dart';
 import 'views/mainScreen.dart';
 
-void main() {
+Future<void> main() async {
   runApp(MyApp());
+
+  FileHandling handler = FileHandling();
+  bool permission = await handler.initSystem();
+  if (permission) {
+    handler.deleteTemp();
+  }
 }
 
 class MyApp extends StatefulWidget {
