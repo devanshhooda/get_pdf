@@ -34,55 +34,75 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: isSelection ? AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            setState(() {
-              selected = List<bool> (files.length);
-              isSelection = false;
-            });
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              for (int i=0; i<selected.length; i++) {
-                if (selected[i] == true) {
-                  handler.deleteFile(files[i]);
-                }
-              }
-              setState(() {
-                files = handler.allFiles();
-                if (files != null && files.isNotEmpty) {
-                  selected = List<bool> (files.length);
-                  filesPresent = true;
-                }
-                isSelection = false;
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () {
-              List<String> paths = [];
-              for (int i=0; i<selected.length; i++) {
-                if (selected[i] == true) {
-                  paths.add(files[i].path);
-                }
-              }
-              ShareExtend.shareMultiple(paths, "pdf");
-              setState(() {
-                isSelection = false;
-                selected = List<bool> (files.length);
-              });
-            },
-          )
-        ],
-      ) : AppBar(
-        title: Text("Get PDF"),
-      ),
+      appBar: isSelection
+          ? AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  setState(() {
+                    selected = List<bool>(files.length);
+                    isSelection = false;
+                  });
+                },
+              ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    for (int i = 0; i < selected.length; i++) {
+                      if (selected[i] == true) {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Delete selected files ?'),
+                                actions: <Widget>[
+                                  FlatButton(
+                                      onPressed: () {
+                                        handler.deleteFile(files[i]);
+                                      },
+                                      child: Text('Yes')),
+                                  FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('No'))
+                                ],
+                              );
+                            });
+                      }
+                    }
+                    setState(() {
+                      files = handler.allFiles();
+                      if (files != null && files.isNotEmpty) {
+                        selected = List<bool>(files.length);
+                        filesPresent = true;
+                      }
+                      isSelection = false;
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () {
+                    List<String> paths = [];
+                    for (int i = 0; i < selected.length; i++) {
+                      if (selected[i] == true) {
+                        paths.add(files[i].path);
+                      }
+                    }
+                    ShareExtend.shareMultiple(paths, "pdf");
+                    setState(() {
+                      isSelection = false;
+                      selected = List<bool>(files.length);
+                    });
+                  },
+                )
+              ],
+            )
+          : AppBar(
+              title: Text("Get PDF"),
+            ),
       body: Center(
         child: filesPresent
             ? Padding(
@@ -94,7 +114,7 @@ class _MainScreenState extends State<MainScreen> {
                     }),
               )
             : Text(
-                'No data',
+                'No history',
                 style: TextStyle(color: Colors.white),
               ),
       ),
@@ -112,14 +132,16 @@ class _MainScreenState extends State<MainScreen> {
                     setState(() {
                       images = imagesList;
                     });
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PreviewPage(
-                        imageList: images,
-                    ))).then((_) {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                            builder: (context) => PreviewPage(
+                                  imageList: images,
+                                )))
+                        .then((_) {
                       setState(() {
                         files = handler.allFiles();
                         if (files != null && files.isNotEmpty) {
-                          selected = List<bool> (files.length);
+                          selected = List<bool>(files.length);
                           filesPresent = true;
                         }
                       });
@@ -135,18 +157,20 @@ class _MainScreenState extends State<MainScreen> {
             child: FloatingActionButton(
               heroTag: "camera",
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => CameraScreen()
-                )).then((images) {
+                Navigator.of(context)
+                    .push(
+                        MaterialPageRoute(builder: (context) => CameraScreen()))
+                    .then((images) {
                   print(images);
-                  if (images.length == 0) return ;
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PreviewPage(imageList: images)
-                  )).then((_) {
+                  if (images.length == 0) return;
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(
+                          builder: (context) => PreviewPage(imageList: images)))
+                      .then((_) {
                     setState(() {
                       files = handler.allFiles();
                       if (files != null && files.isNotEmpty) {
-                        selected = List<bool> (files.length);
+                        selected = List<bool>(files.length);
                         filesPresent = true;
                       }
                     });
@@ -170,19 +194,24 @@ class _MainScreenState extends State<MainScreen> {
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: isSelection && selected[i] == true ? Icon(Icons.done) : Icon(Icons.picture_as_pdf),
+            selected: isSelection,
+            leading: isSelection && selected[i] == true
+                ? Icon(Icons.done)
+                : Icon(Icons.picture_as_pdf),
             title: Text('${files[i].basename}'),
-            subtitle: Text('${files[i].dirname}'),
+            // subtitle: Text('${files[i].dirname}'),
             onTap: () {
               if (isSelection) {
                 setState(() {
                   selected[i] = selected[i] == true ? false : true;
+                  if (selected.isEmpty) {
+                    isSelection = false;
+                  }
                 });
               } else {
                 String filePath = files[i].path;
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ViewPdf(
+                    builder: (context) => ViewPdf(
                           documentPath: filePath,
                         )));
               }
@@ -197,7 +226,7 @@ class _MainScreenState extends State<MainScreen> {
               setState(() {});
             },
           ),
-          Divider()
+          // Divider()
         ],
       ),
     );
@@ -208,7 +237,7 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         files = handler.allFiles();
         if (files != null && files.isNotEmpty) {
-          selected = List<bool> (files.length);
+          selected = List<bool>(files.length);
           filesPresent = true;
         }
       });
