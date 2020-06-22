@@ -6,6 +6,7 @@ import 'package:get_pdf/services/imageServices.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/viewPdf.dart';
+import 'package:share_extend/share_extend.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _MainScreenState extends State<MainScreen> {
   List<File> images;
   bool filesPresent;
   var files;
+  List<bool> selected = [];
+  bool isSelection = false;
 
   @override
   void initState() {
@@ -31,8 +34,54 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Get PDF'),
+      appBar: isSelection ? AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            setState(() {
+              selected = List<bool> (files.length);
+              isSelection = false;
+            });
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              for (int i=0; i<selected.length; i++) {
+                if (selected[i] == true) {
+                  handler.deleteFile(files[i]);
+                }
+              }
+              setState(() {
+                files = handler.allFiles();
+                if (files != null && files.isNotEmpty) {
+                  selected = List<bool> (files.length);
+                  filesPresent = true;
+                }
+                isSelection = false;
+              });
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              List<String> paths = [];
+              for (int i=0; i<selected.length; i++) {
+                if (selected[i] == true) {
+                  paths.add(files[i].path);
+                }
+              }
+              ShareExtend.shareMultiple(paths, "pdf");
+              setState(() {
+                isSelection = false;
+                selected = List<bool> (files.length);
+              });
+            },
+          )
+        ],
+      ) : AppBar(
+        title: Text("Get PDF"),
       ),
       body: Center(
         child: filesPresent
@@ -70,6 +119,7 @@ class _MainScreenState extends State<MainScreen> {
                       setState(() {
                         files = handler.allFiles();
                         if (files != null && files.isNotEmpty) {
+                          selected = List<bool> (files.length);
                           filesPresent = true;
                         }
                       });
@@ -95,6 +145,7 @@ class _MainScreenState extends State<MainScreen> {
                     setState(() {
                       files = handler.allFiles();
                       if (files != null && files.isNotEmpty) {
+                        selected = List<bool> (files.length);
                         filesPresent = true;
                       }
                     });
@@ -118,14 +169,31 @@ class _MainScreenState extends State<MainScreen> {
       child: Column(
         children: <Widget>[
           ListTile(
+            leading: isSelection && selected[i] == true ? Icon(Icons.done) : Icon(Icons.picture_as_pdf),
             title: Text('${files[i].basename}'),
             subtitle: Text('${files[i].dirname}'),
             onTap: () {
-              String filePath = files[i].path;
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ViewPdf(
-                        documentPath: filePath,
-                      )));
+              if (isSelection) {
+                setState(() {
+                  selected[i] = selected[i] == true ? false : true;
+                });
+              } else {
+                String filePath = files[i].path;
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        ViewPdf(
+                          documentPath: filePath,
+                        )));
+              }
+            },
+            onLongPress: () {
+              if (isSelection) {
+                selected[i] = selected[i] == true ? false : true;
+              } else {
+                isSelection = true;
+                selected[i] = selected[i] == true ? false : true;
+              }
+              setState(() {});
             },
           ),
           Divider()
@@ -139,6 +207,7 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         files = handler.allFiles();
         if (files != null && files.isNotEmpty) {
+          selected = List<bool> (files.length);
           filesPresent = true;
         }
       });
