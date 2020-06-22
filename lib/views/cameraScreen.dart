@@ -29,47 +29,56 @@ class CameraScreenState extends State<CameraScreen> {
     if (cameraController == null || !cameraController.value.isInitialized) {
       return Container();
     }
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Column(
-        children: <Widget>[
-          AspectRatio(
-            aspectRatio: cameraController.value.aspectRatio,
-            child: CameraPreview(
-                cameraController
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context, images);
+        return ;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: Column(
+          children: <Widget>[
+            AspectRatio(
+              aspectRatio: cameraController.value.aspectRatio,
+              child: CameraPreview(
+                  cameraController
+              ),
             ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(),
-              ),
-              IconButton(
-                icon: Icon(Icons.camera),
-                onPressed: () async {
-                  File image = handler.getTempFile(name: DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
-                  try {
-                    await cameraController.takePicture(image.path);
-                    images.add(image);
-                    print(image);
-                  } on CameraException catch (e) {
-                    // TODO: show camera exception
-                    print(e);
-                  }
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.done),
-                onPressed: ()  {
-                  Navigator.pop(context, images);
-                },
-              ),
-              Expanded(
-                child: Container(),
-              ),
-            ],
-          )
-        ],
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(),
+                ),
+                Text(images.length.toString()),
+                IconButton(
+                  icon: Icon(Icons.camera),
+                  onPressed: () async {
+                    File image = handler.getTempFile(name: DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+                    try {
+                      await cameraController.takePicture(image.path);
+                      setState(() {
+                        images.add(image);
+                      });
+                      print(image);
+                    } on CameraException catch (e) {
+                      // TODO: show camera exception
+                      print(e);
+                    }
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.done),
+                  onPressed: ()  {
+                    Navigator.pop(context, images);
+                  },
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
