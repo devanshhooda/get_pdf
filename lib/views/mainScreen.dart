@@ -64,9 +64,17 @@ class _MainScreenState extends State<MainScreen> {
                       images = imagesList;
                     });
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PreviewPage(
-                              imageList: images,
-                            )));
+                      builder: (context) => PreviewPage(
+                        imageList: images,
+                    ))).then((_) {
+                      print('pop from gallery ......');
+                      setState(() {
+                        files = handler.allFiles();
+                        if (files != null && files.isNotEmpty) {
+                          filesPresent = true;
+                        }
+                      });
+                    });
                   }
                 });
               },
@@ -84,7 +92,15 @@ class _MainScreenState extends State<MainScreen> {
                   print(images);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => PreviewPage(imageList: images)
-                  ));
+                  )).then((_) {
+                    print('pop from camera ......');
+                    setState(() {
+                      files = handler.allFiles();
+                      if (files != null && files.isNotEmpty) {
+                        filesPresent = true;
+                      }
+                    });
+                  });
                 });
               },
               child: Icon(Icons.photo_camera),
