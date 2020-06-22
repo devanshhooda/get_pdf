@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
+import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/viewPdf.dart';
 
@@ -77,7 +78,14 @@ class _MainScreenState extends State<MainScreen> {
             child: FloatingActionButton(
               heroTag: "camera",
               onPressed: () {
-                print('Camera work to be done');
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CameraScreen()
+                )).then((images) {
+                  print(images);
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => PreviewPage(imageList: images)
+                  ));
+                });
               },
               child: Icon(Icons.photo_camera),
             ),

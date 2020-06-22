@@ -37,7 +37,7 @@ class FileHandling {
   }
 
   Future<void> deleteTemp() async {
-    tempDirectory.deleteSync();
+    tempDirectory.deleteSync(recursive: true);
     tempDirectory = await homeDirectory.childDirectory(Constants.temp).create();
   }
 

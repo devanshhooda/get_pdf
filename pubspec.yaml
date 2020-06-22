@@ -19,6 +19,7 @@ dependencies:
   flutter_full_pdf_viewer: ^1.0.6
   file_picker: ^1.12.0
   share_extend: ^1.1.7
+  camera: ^0.5.8+2
 
 dev_dependencies:
   flutter_test:
