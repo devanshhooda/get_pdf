@@ -139,6 +139,7 @@ class _MainScreenState extends State<MainScreen> {
                   builder: (context) => CameraScreen()
                 )).then((images) {
                   print(images);
+                  if (images.length == 0) return ;
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => PreviewPage(imageList: images)
                   )).then((_) {
