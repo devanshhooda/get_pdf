@@ -206,7 +206,7 @@ class _MainScreenState extends State<MainScreen> {
                                 )))
                         .then((_) {
                       setState(() {
-                        files = handler.allFiles();
+                        files = handler.allFiles().reversed;
                         if (files != null && files.isNotEmpty) {
                           selected = List<bool>(files.length);
                           filesPresent = true;
@@ -239,7 +239,7 @@ class _MainScreenState extends State<MainScreen> {
                           builder: (context) => PreviewPage(imageList: images)))
                       .then((_) {
                     setState(() {
-                      files = handler.allFiles();
+                      files = handler.allFiles().reversed;
                       if (files != null && files.isNotEmpty) {
                         selected = List<bool>(files.length);
                         filesPresent = true;
@@ -371,7 +371,7 @@ class _MainScreenState extends State<MainScreen> {
       }
     }
     setState(() {
-      files = handler.allFiles();
+      files = handler.allFiles().reversed;
       if (files != null && files.isNotEmpty) {
         selected = List<bool>(files.length);
         filesPresent = true;

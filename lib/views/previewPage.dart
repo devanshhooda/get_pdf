@@ -77,12 +77,13 @@ class _PreviewPageState extends State<PreviewPage> {
               await pdfServices.createPdfFromImages(widget.imageList);
           Navigator.of(context).pop();
           if (filename == null) return;
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) => ViewPdf(
-                        documentPath: filename,
-                      )),
-              ModalRoute.withName('/'));
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ViewPdf(
+                documentPath: filename,
+              )
+            )
+          ).then((value) => Navigator.of(context).pop());
         },
         child: Icon(Icons.check),
       ),
