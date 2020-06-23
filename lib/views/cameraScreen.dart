@@ -79,10 +79,8 @@ class CameraScreenState extends State<CameraScreen> {
                                 '.jpg');
                         try {
                           await cameraController.takePicture(image.path);
-                          setState(() {
-                            images.add(image);
-                          });
-                          print(image);
+                          images.add(image);
+                          setState(() {});
                         } on CameraException catch (e) {
                           print(e);
                         }

@@ -15,9 +15,13 @@ class PreviewPage extends StatefulWidget {
 
 class _PreviewPageState extends State<PreviewPage> {
   PdfServices pdfServices;
+  List<bool> selected;
+  bool isSelection;
 
   @override
   void initState() {
+    selected = List<bool> (widget.imageList.length);
+    isSelection = false;
     pdfServices = PdfServices();
     super.initState();
   }
@@ -25,19 +29,39 @@ class _PreviewPageState extends State<PreviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: isSelection ? AppBar(
+        backgroundColor: Colors.deepOrangeAccent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            isSelection = false;
+            selected = List<bool> (widget.imageList.length);
+            setState(() {});
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              int k = 0;
+              for (int i=0; i<selected.length; i++) {
+                if (selected[i] == true) {
+                  widget.imageList.removeAt(i + k);
+                  k--;
+                }
+              }
+              isSelection = false;
+              selected = List<bool> (widget.imageList.length);
+              setState(() {});
+            },
+          )
+        ],
+      ) : AppBar(
         backgroundColor: Colors.deepOrangeAccent,
         title: Text(
           'Preview',
           style: GoogleFonts.cantoraOne(),
         ),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                Navigator.of(context).pop();
-              })
-        ],
       ),
       body: Container(
         child: GridView.builder(
@@ -47,11 +71,24 @@ class _PreviewPageState extends State<PreviewPage> {
             itemBuilder: (context, i) {
               return GestureDetector(
                 onTap: () {
-                  print('Editing image process to be done');
+                  if (isSelection) {
+                    setState(() {
+                      selected[i] = selected[i] == true ? false : true;
+                    });
+                  } else {
+                    print('Editing image process to be done');
+                  }
+                },
+                onLongPress: () {
+                  setState(() {
+                    selected[i] = selected[i] == true ? false : true;
+                    isSelection = true;
+                  });
                 },
                 child: Container(
                   margin: EdgeInsets.all(5),
-                  color: Colors.white,
+                  padding: EdgeInsets.all(2),
+                  color: isSelection && selected[i] == true ? Colors.orange : Colors.white,
                   child: Image.file(
                     widget.imageList[i],
                     fit: BoxFit.contain,

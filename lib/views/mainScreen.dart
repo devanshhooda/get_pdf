@@ -20,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   FileHandling handler;
   List<File> images;
   bool filesPresent;
-  var files;
+  List<FileSystemEntity> files;
   List<bool> selected = [];
   bool isSelection = false;
 
@@ -206,7 +206,8 @@ class _MainScreenState extends State<MainScreen> {
                                 )))
                         .then((_) {
                       setState(() {
-                        files = handler.allFiles().reversed;
+                        files = handler.allFiles();
+                        files.sort((a, b) => b.path.compareTo(a.path));
                         if (files != null && files.isNotEmpty) {
                           selected = List<bool>(files.length);
                           filesPresent = true;
@@ -239,7 +240,8 @@ class _MainScreenState extends State<MainScreen> {
                           builder: (context) => PreviewPage(imageList: images)))
                       .then((_) {
                     setState(() {
-                      files = handler.allFiles().reversed;
+                      files = handler.allFiles();
+                      files.sort((a, b) => b.path.compareTo(a.path));
                       if (files != null && files.isNotEmpty) {
                         selected = List<bool>(files.length);
                         filesPresent = true;
@@ -284,7 +286,7 @@ class _MainScreenState extends State<MainScreen> {
                     backgroundImage: AssetImage('assets/fileIcon.png'),
                   ),
             title: Text(
-              '${files[i].basename}',
+              '${files[i].path.split('/').removeLast()}',
               style: GoogleFonts.philosopher(
                   textStyle:
                       TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
@@ -307,12 +309,8 @@ class _MainScreenState extends State<MainScreen> {
             },
             onLongPress: () {
               setState(() {
-                if (isSelection) {
-                  selected[i] = selected[i] == true ? false : true;
-                } else {
-                  isSelection = true;
-                  selected[i] = selected[i] == true ? false : true;
-                }
+                isSelection = true;
+                selected[i] = selected[i] == true ? false : true;
               });
             },
           ),
@@ -371,7 +369,8 @@ class _MainScreenState extends State<MainScreen> {
       }
     }
     setState(() {
-      files = handler.allFiles().reversed;
+      files = handler.allFiles();
+      files.sort((a, b) => b.path.compareTo(a.path));
       if (files != null && files.isNotEmpty) {
         selected = List<bool>(files.length);
         filesPresent = true;
@@ -382,8 +381,10 @@ class _MainScreenState extends State<MainScreen> {
 
   initFileSystem() async {
     await handler.initSystem().then((value) {
+      handler.deleteTemp();
       setState(() {
         files = handler.allFiles();
+        files.sort((a, b) => b.path.compareTo(a.path));
         if (files != null && files.isNotEmpty) {
           selected = List<bool>(files.length);
           filesPresent = true;

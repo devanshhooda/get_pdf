@@ -10,11 +10,6 @@ Future<void> main() async {
   runApp(MyApp());
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  FileHandling handler = FileHandling();
-  bool permission = await handler.initSystem();
-  if (permission) {
-    handler.deleteTemp();
-  }
 }
 
 class MyApp extends StatefulWidget {
