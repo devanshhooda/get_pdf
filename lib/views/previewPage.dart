@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
@@ -25,7 +26,11 @@ class _PreviewPageState extends State<PreviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Preview'),
+        backgroundColor: Colors.deepOrangeAccent,
+        title: Text(
+          'Preview',
+          style: GoogleFonts.cantoraOne(),
+        ),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.delete),
@@ -56,6 +61,7 @@ class _PreviewPageState extends State<PreviewPage> {
             }),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepOrange,
         onPressed: () async {
           showDialog(
               context: context,
@@ -71,10 +77,12 @@ class _PreviewPageState extends State<PreviewPage> {
               await pdfServices.createPdfFromImages(widget.imageList);
           Navigator.of(context).pop();
           if (filename == null) return;
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ViewPdf(
-                    documentPath: filename,
-                  )));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => ViewPdf(
+                        documentPath: filename,
+                      )),
+              ModalRoute.withName('/'));
         },
         child: Icon(Icons.check),
       ),

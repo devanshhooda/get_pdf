@@ -5,7 +5,9 @@ import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
+import 'package:get_pdf/views/settingsPage.dart';
 import 'package:get_pdf/views/viewPdf.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_extend/share_extend.dart';
 
 class MainScreen extends StatefulWidget {
@@ -36,6 +38,9 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: isSelection
           ? AppBar(
+              backgroundColor: Colors.deepOrangeAccent,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
@@ -48,38 +53,27 @@ class _MainScreenState extends State<MainScreen> {
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.delete),
-                  onPressed: () {
-                    for (int i = 0; i < selected.length; i++) {
-                      if (selected[i] == true) {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text('Delete selected files ?'),
-                                actions: <Widget>[
-                                  FlatButton(
-                                      onPressed: () {
-                                        handler.deleteFile(files[i]);
-                                      },
-                                      child: Text('Yes')),
-                                  FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('No'))
-                                ],
-                              );
-                            });
-                      }
-                    }
-                    setState(() {
-                      files = handler.allFiles();
-                      if (files != null && files.isNotEmpty) {
-                        selected = List<bool>(files.length);
-                        filesPresent = true;
-                      }
-                      isSelection = false;
-                    });
+                  onPressed: () async {
+                    await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Delete selected files ?'),
+                            actions: <Widget>[
+                              FlatButton(
+                                  onPressed: () {
+                                    deleteFiles();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Yes')),
+                              FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('No'))
+                            ],
+                          );
+                        });
                   },
                 ),
                 IconButton(
@@ -101,17 +95,89 @@ class _MainScreenState extends State<MainScreen> {
               ],
             )
           : AppBar(
-              title: Text("Get PDF"),
+              backgroundColor: Colors.deepOrangeAccent,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25)),
+              title: Text(
+                "Get PDF",
+                style:
+                    GoogleFonts.righteous(textStyle: TextStyle(fontSize: 30)),
+              ),
+              centerTitle: true,
             ),
+      drawer: Drawer(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 15,
+                child: ListView(
+                  children: <Widget>[
+                    UserAccountsDrawerHeader(
+                      accountName: Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Text(
+                          'Get PDF',
+                          style: GoogleFonts.righteous(
+                              textStyle: TextStyle(fontSize: 30)),
+                        ),
+                      ),
+                      accountEmail: Text(
+                        'Convert your images into PDF',
+                        style: GoogleFonts.sofadiOne(),
+                      ),
+                      currentAccountPicture: CircleAvatar(
+                        backgroundImage: AssetImage('assets/appIcon.jpg'),
+                      ),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Colors.red, Colors.yellow],
+                              begin: Alignment.topLeft,
+                              end: Alignment.centerRight),
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(40))),
+                    ),
+                    drawerButton(buttonName: 'Settings', icon: Icons.settings),
+                    drawerButton(buttonName: 'Share App', icon: Icons.share),
+                    drawerButton(buttonName: 'Rate App', icon: Icons.star),
+                    drawerButton(buttonName: 'About Us', icon: Icons.info),
+                  ],
+                ),
+              ),
+              Expanded(flex: 1, child: Text('Version : 1.0.0'))
+            ],
+          ),
+        ),
+      ),
       body: Center(
         child: filesPresent
             ? Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
-                child: ListView.builder(
-                    itemCount: files.length,
-                    itemBuilder: (context, i) {
-                      return homePageContent(i);
-                    }),
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 0,
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(right: 270, top: 10, bottom: 10),
+                        child: Text(
+                          'Your files :',
+                          style: GoogleFonts.amaranth(
+                              textStyle: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 10,
+                      child: ListView.builder(
+                          itemCount: files.length,
+                          itemBuilder: (context, i) {
+                            return homePageContent(i);
+                          }),
+                    ),
+                  ],
+                ),
               )
             : Text(
                 'No history',
@@ -124,6 +190,7 @@ class _MainScreenState extends State<MainScreen> {
           Padding(
             padding: EdgeInsets.all(5),
             child: FloatingActionButton(
+              backgroundColor: Colors.deepOrange,
               heroTag: "gallery",
               onPressed: () async {
                 await imageServices.pickImages().then((imagesList) {
@@ -149,12 +216,16 @@ class _MainScreenState extends State<MainScreen> {
                   }
                 });
               },
-              child: Icon(Icons.add_photo_alternate),
+              child: Icon(
+                Icons.add_photo_alternate,
+                color: Colors.white,
+              ),
             ),
           ),
           Padding(
             padding: EdgeInsets.all(5),
             child: FloatingActionButton(
+              backgroundColor: Colors.deepOrange,
               heroTag: "camera",
               onPressed: () {
                 Navigator.of(context)
@@ -177,7 +248,10 @@ class _MainScreenState extends State<MainScreen> {
                   });
                 });
               },
-              child: Icon(Icons.photo_camera),
+              child: Icon(
+                Icons.photo_camera,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -188,18 +262,33 @@ class _MainScreenState extends State<MainScreen> {
   homePageContent(int i) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.redAccent),
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+              colors: [Colors.red, Colors.orangeAccent],
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft)),
       child: Column(
         children: <Widget>[
           ListTile(
-            selected: isSelection,
+            selected:
+                selected[i] != null ? (selected[i] ? true : false) : false,
             leading: isSelection && selected[i] == true
-                ? Icon(Icons.done)
-                : Icon(Icons.picture_as_pdf),
-            title: Text('${files[i].basename}'),
-            // subtitle: Text('${files[i].dirname}'),
+                ? CircleAvatar(
+                    radius: 25,
+                    child: Icon(Icons.done),
+                  )
+                : CircleAvatar(
+                    radius: 25,
+                    backgroundImage: AssetImage('assets/fileIcon.png'),
+                  ),
+            title: Text(
+              '${files[i].basename}',
+              style: GoogleFonts.philosopher(
+                  textStyle:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+            ),
             onTap: () {
               if (isSelection) {
                 setState(() {
@@ -217,19 +306,78 @@ class _MainScreenState extends State<MainScreen> {
               }
             },
             onLongPress: () {
-              if (isSelection) {
-                selected[i] = selected[i] == true ? false : true;
-              } else {
-                isSelection = true;
-                selected[i] = selected[i] == true ? false : true;
-              }
-              setState(() {});
+              setState(() {
+                if (isSelection) {
+                  selected[i] = selected[i] == true ? false : true;
+                } else {
+                  isSelection = true;
+                  selected[i] = selected[i] == true ? false : true;
+                }
+              });
             },
           ),
           // Divider()
         ],
       ),
     );
+  }
+
+  Widget drawerButton({String buttonName, IconData icon}) {
+    return Container(
+      height: 60,
+      margin: EdgeInsets.only(
+        top: 10,
+        right: 10,
+      ),
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.purpleAccent, Colors.cyanAccent],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight),
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(40), bottomRight: Radius.circular(40))),
+      child: MaterialButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        onPressed: () {
+          if (buttonName == 'Settings') {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => SettingsPage()));
+          }
+        },
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(
+                '$buttonName',
+                style:
+                    GoogleFonts.cantoraOne(textStyle: TextStyle(fontSize: 17)),
+              ),
+              Icon(
+                icon,
+                size: 25,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  deleteFiles() async {
+    for (int i = 0; i < selected.length; i++) {
+      if (selected[i] == true) {
+        handler.deleteFile(files[i]);
+      }
+    }
+    setState(() {
+      files = handler.allFiles();
+      if (files != null && files.isNotEmpty) {
+        selected = List<bool>(files.length);
+        filesPresent = true;
+      }
+      isSelection = false;
+    });
   }
 
   initFileSystem() async {

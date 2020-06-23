@@ -18,7 +18,14 @@ class PdfServices {
         pdf.addPage(pw.Page(
             pageFormat: PdfPageFormat.a4,
             build: (pw.Context context) {
-              return pw.Container(child: pw.Image(pdfImage));
+              return pw.Container(
+                child:
+                    // pw.Column(children: <pw.Widget>[
+                    pw.Image(pdfImage),
+                //   pw.Footer(
+                //       title: pw.Text('GetPDF'), trailing: pw.Text('Make PDF'))
+                // ])
+              );
             }));
       }
 

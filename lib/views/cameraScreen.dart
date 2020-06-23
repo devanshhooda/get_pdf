@@ -51,19 +51,25 @@ class CameraScreenState extends State<CameraScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   CircleAvatar(
+                    backgroundColor: Colors.deepOrange,
                     radius: 30,
                     backgroundImage: images.length > 0
                         ? AssetImage(images[images.length - 1].path)
                         : null,
                     child: Text(
                       images.length.toString(),
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   CircleAvatar(
+                    backgroundColor: Colors.deepOrange,
                     radius: 30,
                     child: IconButton(
                       iconSize: 30,
+                      color: Colors.white,
                       icon: Icon(Icons.photo_camera),
                       onPressed: () async {
                         File image = handler.getTempFile(
@@ -84,8 +90,10 @@ class CameraScreenState extends State<CameraScreen> {
                     ),
                   ),
                   CircleAvatar(
+                    backgroundColor: Colors.deepOrange,
                     radius: 30,
                     child: IconButton(
+                      color: Colors.white,
                       iconSize: 25,
                       icon: Icon(Icons.done),
                       onPressed: () {
@@ -110,7 +118,7 @@ class CameraScreenState extends State<CameraScreen> {
 
   camerInitialisation() async {
     cameras = await availableCameras();
-    cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    cameraController = CameraController(cameras[0], ResolutionPreset.max);
     await cameraController.initialize();
     await handler.initSystem();
     setState(() {

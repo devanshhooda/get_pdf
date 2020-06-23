@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_extend/share_extend.dart';
 
 class ViewPdf extends StatefulWidget {
@@ -17,14 +18,18 @@ class _ViewPdfState extends State<ViewPdf> {
     return PDFViewerScaffold(
       path: path,
       appBar: AppBar(
-        title: Text(name),
+        elevation: 0,
+        backgroundColor: Colors.deepOrangeAccent,
+        title: Text(
+          '$name',
+          style: GoogleFonts.cantoraOne(),
+        ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () {
-              ShareExtend.share(widget.documentPath, "pdf");
-            }
-          )
+              icon: Icon(Icons.share),
+              onPressed: () {
+                ShareExtend.share(widget.documentPath, "pdf");
+              })
         ],
       ),
     );
