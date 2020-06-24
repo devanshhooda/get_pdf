@@ -1,14 +1,17 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
+import 'package:get_pdf/utils/colors.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/settingsPage.dart';
 import 'package:get_pdf/views/viewPdf.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_extend/share_extend.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -23,12 +26,15 @@ class _MainScreenState extends State<MainScreen> {
   List<FileSystemEntity> files;
   List<bool> selected = [];
   bool isSelection = false;
+  bool isDark;
+  SharedPreferences prefs;
 
   @override
   void initState() {
     imageServices = ImageServices();
     handler = FileHandling();
     initFileSystem();
+    initSP();
     filesPresent = false;
     super.initState();
   }
@@ -40,7 +46,9 @@ class _MainScreenState extends State<MainScreen> {
           ? AppBar(
               backgroundColor: Colors.deepOrangeAccent,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25)),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      topLeft: Radius.circular(25))),
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
@@ -137,6 +145,21 @@ class _MainScreenState extends State<MainScreen> {
                           borderRadius: BorderRadius.only(
                               bottomRight: Radius.circular(40))),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text('Dark mode',
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold)),
+                        Switch(
+                            value: isDark,
+                            onChanged: (val) async {
+                              isDark = val;
+                              await prefs.setBool("isDark", isDark);
+                              context.findAncestorStateOfType().setState(() {});
+                            })
+                      ],
+                    ),
                     drawerButton(buttonName: 'Settings', icon: Icons.settings),
                     drawerButton(buttonName: 'Share App', icon: Icons.share),
                     drawerButton(buttonName: 'Rate App', icon: Icons.star),
@@ -164,7 +187,7 @@ class _MainScreenState extends State<MainScreen> {
                           'Your files :',
                           style: GoogleFonts.amaranth(
                               textStyle: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold)),
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ),
@@ -180,8 +203,8 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               )
             : Text(
-                'No history',
-                style: TextStyle(color: Colors.white),
+                'You have no saved files',
+                style: TextStyle(color: Colors.grey),
               ),
       ),
       floatingActionButton: Column(
@@ -190,7 +213,6 @@ class _MainScreenState extends State<MainScreen> {
           Padding(
             padding: EdgeInsets.all(5),
             child: FloatingActionButton(
-              backgroundColor: Colors.deepOrange,
               heroTag: "gallery",
               onPressed: () async {
                 await imageServices.pickImages().then((imagesList) {
@@ -226,7 +248,6 @@ class _MainScreenState extends State<MainScreen> {
           Padding(
             padding: EdgeInsets.all(5),
             child: FloatingActionButton(
-              backgroundColor: Colors.deepOrange,
               heroTag: "camera",
               onPressed: () {
                 Navigator.of(context)
@@ -268,7 +289,7 @@ class _MainScreenState extends State<MainScreen> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           gradient: LinearGradient(
-              colors: [Colors.red, Colors.orangeAccent],
+              colors: [Colors.deepOrange, Colors.purpleAccent],
               begin: Alignment.bottomRight,
               end: Alignment.topLeft)),
       child: Column(
@@ -288,8 +309,10 @@ class _MainScreenState extends State<MainScreen> {
             title: Text(
               '${files[i].path.split('/').removeLast()}',
               style: GoogleFonts.philosopher(
-                  textStyle:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                  textStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white)),
             ),
             onTap: () {
               if (isSelection) {
@@ -314,7 +337,6 @@ class _MainScreenState extends State<MainScreen> {
               });
             },
           ),
-          // Divider()
         ],
       ),
     );
@@ -339,7 +361,7 @@ class _MainScreenState extends State<MainScreen> {
         onPressed: () {
           if (buttonName == 'Settings') {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => SettingsPage()));
+                .push(CupertinoPageRoute(builder: (context) => SettingsPage()));
           }
         },
         child: Container(
@@ -391,5 +413,11 @@ class _MainScreenState extends State<MainScreen> {
         }
       });
     });
+  }
+
+  initSP() async {
+    prefs = await SharedPreferences.getInstance();
+    isDark = prefs.getBool("isDark") ?? true;
+    setState(() {});
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_editor_pro/image_editor_pro.dart';
 
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
@@ -17,10 +19,11 @@ class _PreviewPageState extends State<PreviewPage> {
   PdfServices pdfServices;
   List<bool> selected;
   bool isSelection;
+  var getEditImage;
 
   @override
   void initState() {
-    selected = List<bool> (widget.imageList.length);
+    selected = List<bool>(widget.imageList.length);
     isSelection = false;
     pdfServices = PdfServices();
     super.initState();
@@ -29,40 +32,42 @@ class _PreviewPageState extends State<PreviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: isSelection ? AppBar(
-        backgroundColor: Colors.deepOrangeAccent,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            isSelection = false;
-            selected = List<bool> (widget.imageList.length);
-            setState(() {});
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              int k = 0;
-              for (int i=0; i<selected.length; i++) {
-                if (selected[i] == true) {
-                  widget.imageList.removeAt(i + k);
-                  k--;
-                }
-              }
-              isSelection = false;
-              selected = List<bool> (widget.imageList.length);
-              setState(() {});
-            },
-          )
-        ],
-      ) : AppBar(
-        backgroundColor: Colors.deepOrangeAccent,
-        title: Text(
-          'Preview',
-          style: GoogleFonts.cantoraOne(),
-        ),
-      ),
+      appBar: isSelection
+          ? AppBar(
+              backgroundColor: Colors.deepOrangeAccent,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  isSelection = false;
+                  selected = List<bool>(widget.imageList.length);
+                  setState(() {});
+                },
+              ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    int k = 0;
+                    for (int i = 0; i < selected.length; i++) {
+                      if (selected[i] == true) {
+                        widget.imageList.removeAt(i + k);
+                        k--;
+                      }
+                    }
+                    isSelection = false;
+                    selected = List<bool>(widget.imageList.length);
+                    setState(() {});
+                  },
+                )
+              ],
+            )
+          : AppBar(
+              backgroundColor: Colors.deepOrangeAccent,
+              title: Text(
+                'Selected images',
+                style: GoogleFonts.cantoraOne(),
+              ),
+            ),
       body: Container(
         child: GridView.builder(
             itemCount: widget.imageList.length,
@@ -76,7 +81,7 @@ class _PreviewPageState extends State<PreviewPage> {
                       selected[i] = selected[i] == true ? false : true;
                     });
                   } else {
-                    print('Editing image process to be done');
+                    getImageEditor(widget.imageList[i]);
                   }
                 },
                 onLongPress: () {
@@ -88,7 +93,9 @@ class _PreviewPageState extends State<PreviewPage> {
                 child: Container(
                   margin: EdgeInsets.all(5),
                   padding: EdgeInsets.all(2),
-                  color: isSelection && selected[i] == true ? Colors.orange : Colors.white,
+                  color: isSelection && selected[i] == true
+                      ? Colors.orange
+                      : Colors.white,
                   child: Image.file(
                     widget.imageList[i],
                     fit: BoxFit.contain,
@@ -114,16 +121,36 @@ class _PreviewPageState extends State<PreviewPage> {
               await pdfServices.createPdfFromImages(widget.imageList);
           Navigator.of(context).pop();
           if (filename == null) return;
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ViewPdf(
-                documentPath: filename,
-              )
-            )
-          ).then((value) => Navigator.of(context).pop());
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => ViewPdf(
+                        documentPath: filename,
+                      )))
+              .then((value) => Navigator.of(context).pop());
         },
-        child: Icon(Icons.check),
+        child: Icon(
+          Icons.picture_as_pdf,
+          color: Colors.white,
+        ),
       ),
     );
+  }
+
+  Future<void> getImageEditor(File _image) {
+    getEditImage =
+        Navigator.push(context, CupertinoPageRoute(builder: (context) {
+      return ImageEditorPro(
+        appBarColor: Colors.deepOrange,
+        bottomBarColor: Colors.deepOrange,
+      );
+    })).then((getEditImage) {
+      if (getEditImage != null) {
+        setState(() {
+          _image = getEditImage;
+        });
+      }
+    }).catchError((err) {
+      print(err);
+    });
   }
 }

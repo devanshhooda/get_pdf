@@ -115,12 +115,16 @@ class CameraScreenState extends State<CameraScreen> {
   }
 
   camerInitialisation() async {
-    cameras = await availableCameras();
-    cameraController = CameraController(cameras[0], ResolutionPreset.max);
-    await cameraController.initialize();
-    await handler.initSystem();
-    setState(() {
-      // TODO: anything
-    });
+    // try {
+      cameras = await availableCameras();
+      cameraController = CameraController(cameras[0], ResolutionPreset.max);
+      await cameraController.initialize();
+      await handler.initSystem();
+      setState(() {
+        // TODO: anything
+      });
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 }

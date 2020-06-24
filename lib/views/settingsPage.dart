@@ -8,13 +8,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  SharedPreferences prefs;
   bool isDark = true;
   double _value = 0;
 
   @override
   void initState() {
-    realInitState();
     super.initState();
   }
 
@@ -76,30 +74,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     max: 100,
                   )),
             ),
-            Text("Theme:"),
-            ToggleButtons(
-              selectedColor: Colors.deepOrange,
-              children: <Widget>[
-                Text("light"),
-                Text("dark")
-              ],
-              isSelected: [!isDark, isDark],
-              onPressed: (int i) async {
-                isDark = i == 1;
-                await prefs.setBool("isDark", isDark);
-                context.findAncestorStateOfType().setState(() { });
-                setState(() {});
-              },
-            )
           ],
         ),
       ),
     );
-  }
-
-  realInitState() async {
-    prefs = await SharedPreferences.getInstance();
-    isDark = prefs.getBool("isDark") ?? true;
-    setState(() {});
   }
 }

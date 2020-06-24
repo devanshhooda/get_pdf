@@ -14,14 +14,14 @@ class _ViewPdfState extends State<ViewPdf> {
   @override
   Widget build(BuildContext context) {
     String path = widget.documentPath;
-    String name = path.split('/').removeLast();
+    String fileName = path.split('/').removeLast();
     return PDFViewerScaffold(
       path: path,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.deepOrangeAccent,
         title: Text(
-          '$name',
+          '$fileName',
           style: GoogleFonts.cantoraOne(),
         ),
         actions: <Widget>[
