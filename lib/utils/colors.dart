@@ -10,8 +10,9 @@ class ColorUtil {
       backgroundColor: Colors.white,
       accentColor: Colors.black,
       textSelectionColor: Colors.purpleAccent,
-      floatingActionButtonTheme:
-          FloatingActionButtonThemeData(backgroundColor: Colors.deepOrange),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.purpleAccent[400]),
+      iconTheme: IconThemeData(color: Colors.black),
       dividerColor: Colors.white54,
       dialogTheme: DialogTheme(
           shape:
@@ -24,8 +25,9 @@ class ColorUtil {
       backgroundColor: Colors.black,
       accentColor: Colors.white,
       textSelectionColor: Colors.purpleAccent,
-      floatingActionButtonTheme:
-          FloatingActionButtonThemeData(backgroundColor: Colors.deepOrangeAccent),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.deepOrangeAccent[700]),
+      iconTheme: IconThemeData(color: Colors.white),
       dividerColor: Colors.black12,
       dialogTheme: DialogTheme(
           shape:

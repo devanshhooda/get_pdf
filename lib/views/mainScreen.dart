@@ -193,7 +193,10 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     Expanded(
                       flex: 10,
-                      child: ListView.builder(
+                      child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2),
                           itemCount: files.length,
                           itemBuilder: (context, i) {
                             return homePageContent(i);
@@ -241,7 +244,7 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: Icon(
                 Icons.add_photo_alternate,
-                color: Colors.white,
+                // color: Colors.white,
               ),
             ),
           ),
@@ -273,7 +276,7 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: Icon(
                 Icons.photo_camera,
-                color: Colors.white,
+                // color: Colors.white,
               ),
             ),
           ),
@@ -283,62 +286,106 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   homePageContent(int i) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-              colors: [Colors.deepOrange, Colors.purpleAccent],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft)),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            selected:
-                selected[i] != null ? (selected[i] ? true : false) : false,
-            leading: isSelection && selected[i] == true
-                ? CircleAvatar(
-                    radius: 25,
-                    child: Icon(Icons.done),
-                  )
-                : CircleAvatar(
-                    radius: 25,
-                    backgroundImage: AssetImage('assets/fileIcon.png'),
-                  ),
-            title: Text(
-              '${files[i].path.split('/').removeLast()}',
-              style: GoogleFonts.philosopher(
-                  textStyle: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white)),
-            ),
-            onTap: () {
-              if (isSelection) {
-                setState(() {
-                  selected[i] = selected[i] == true ? false : true;
-                  if (selected.isEmpty) {
-                    isSelection = false;
-                  }
-                });
-              } else {
-                String filePath = files[i].path;
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ViewPdf(
-                          documentPath: filePath,
-                        )));
-              }
-            },
-            onLongPress: () {
-              setState(() {
-                isSelection = true;
-                selected[i] = selected[i] == true ? false : true;
-              });
-            },
+    return GestureDetector(
+      child: Container(
+          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                  colors: [Colors.deepOrangeAccent, Colors.purpleAccent[700]],
+                  end: Alignment.bottomRight,
+                  begin: Alignment.topLeft)),
+          // child: Column(
+          //   children: <Widget>[
+          // ListTile(
+          //   selected:
+          //       selected[i] != null ? (selected[i] ? true : false) : false,
+          //   leading: isSelection && selected[i] == true
+          //       ? CircleAvatar(
+          //           radius: 25,
+          //           child: Icon(Icons.done),
+          //         )
+          //       : CircleAvatar(
+          //           radius: 25,
+          //           backgroundImage: AssetImage('assets/fileIcon.png'),
+          //         ),
+          //   title: Text(
+          //     '${files[i].path.split('/').removeLast()}',
+          //     style: GoogleFonts.philosopher(
+          //         textStyle: TextStyle(
+          //             fontSize: 18,
+          //             fontWeight: FontWeight.w800,
+          //             color: Colors.white)),
+          //   ),
+          // onTap: () {
+          //   if (isSelection) {
+          //     setState(() {
+          //       selected[i] = selected[i] == true ? false : true;
+          //       if (selected.isEmpty) {
+          //         isSelection = false;
+          //       }
+          //     });
+          //   } else {
+          //     String filePath = files[i].path;
+          //     Navigator.of(context).push(MaterialPageRoute(
+          //         builder: (context) => ViewPdf(
+          //               documentPath: filePath,
+          //             )));
+          //   }
+          // },
+          // onLongPress: () {
+          //   setState(() {
+          //     isSelection = true;
+          //     selected[i] = selected[i] == true ? false : true;
+          //   });
+          // },
+          // ),
+          child: GridTile(
+              header: isSelection && selected[i] == true
+                  ? Padding(
+                      padding: EdgeInsets.only(right: 100),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.purpleAccent,
+                        radius: 25,
+                        child: Icon(Icons.done),
+                      ),
+                    )
+                  : null,
+              footer: Text(
+                '${files[i].path.split('/').removeLast()}',
+                style: GoogleFonts.philosopher(
+                    textStyle: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white)),
+              ),
+              child: Text(''))
+          //   ],
+          // ),
           ),
-        ],
-      ),
+      onTap: () {
+        if (isSelection) {
+          setState(() {
+            selected[i] = selected[i] == true ? false : true;
+            if (selected.isEmpty) {
+              isSelection = false;
+            }
+          });
+        } else {
+          String filePath = files[i].path;
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ViewPdf(
+                    documentPath: filePath,
+                  )));
+        }
+      },
+      onLongPress: () {
+        setState(() {
+          isSelection = true;
+          selected[i] = selected[i] == true ? false : true;
+        });
+      },
     );
   }
 
