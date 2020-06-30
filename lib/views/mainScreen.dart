@@ -27,6 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   List<bool> selected = [];
   bool isSelection = false;
   bool isDark;
+  bool isListView = false;
   SharedPreferences prefs;
 
   @override
@@ -107,7 +108,7 @@ class _MainScreenState extends State<MainScreen> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25)),
               title: Text(
-                "Get PDF",
+                "Indocanner",
                 style:
                     GoogleFonts.righteous(textStyle: TextStyle(fontSize: 30)),
               ),
@@ -125,7 +126,7 @@ class _MainScreenState extends State<MainScreen> {
                       accountName: Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: Text(
-                          'Get PDF',
+                          'Indocanner',
                           style: GoogleFonts.righteous(
                               textStyle: TextStyle(fontSize: 30)),
                         ),
@@ -181,26 +182,52 @@ class _MainScreenState extends State<MainScreen> {
                     Expanded(
                       flex: 0,
                       child: Padding(
-                        padding:
-                            EdgeInsets.only(right: 270, top: 10, bottom: 10),
-                        child: Text(
-                          'Your files :',
-                          style: GoogleFonts.amaranth(
-                              textStyle: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                        padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Your files :',
+                              style: GoogleFonts.amaranth(
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            FlatButton(
+                                onPressed: () {
+                                  isListView = !isListView;
+                                },
+                                child: Row(
+                                  children: isListView
+                                      ? <Widget>[
+                                          Text('Grid View'),
+                                          Icon(Icons.grid_on)
+                                        ]
+                                      : <Widget>[
+                                          Text('List View'),
+                                          Icon(Icons.list)
+                                        ],
+                                ))
+                          ],
                         ),
                       ),
                     ),
                     Expanded(
                       flex: 10,
-                      child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          itemCount: files.length,
-                          itemBuilder: (context, i) {
-                            return homePageContent(i);
-                          }),
+                      child: isListView
+                          ? ListView.builder(
+                              itemCount: files.length,
+                              itemBuilder: (context, i) {
+                                return listViewContent(i);
+                              })
+                          : GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2),
+                              itemCount: files.length,
+                              itemBuilder: (context, i) {
+                                return gridViewContent(i);
+                              }),
                     ),
                   ],
                 ),
@@ -285,7 +312,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  homePageContent(int i) {
+  gridViewContent(int i) {
     return GestureDetector(
       child: Container(
           margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -296,51 +323,6 @@ class _MainScreenState extends State<MainScreen> {
                   colors: [Colors.deepOrangeAccent, Colors.purpleAccent[700]],
                   end: Alignment.bottomRight,
                   begin: Alignment.topLeft)),
-          // child: Column(
-          //   children: <Widget>[
-          // ListTile(
-          //   selected:
-          //       selected[i] != null ? (selected[i] ? true : false) : false,
-          //   leading: isSelection && selected[i] == true
-          //       ? CircleAvatar(
-          //           radius: 25,
-          //           child: Icon(Icons.done),
-          //         )
-          //       : CircleAvatar(
-          //           radius: 25,
-          //           backgroundImage: AssetImage('assets/fileIcon.png'),
-          //         ),
-          //   title: Text(
-          //     '${files[i].path.split('/').removeLast()}',
-          //     style: GoogleFonts.philosopher(
-          //         textStyle: TextStyle(
-          //             fontSize: 18,
-          //             fontWeight: FontWeight.w800,
-          //             color: Colors.white)),
-          //   ),
-          // onTap: () {
-          //   if (isSelection) {
-          //     setState(() {
-          //       selected[i] = selected[i] == true ? false : true;
-          //       if (selected.isEmpty) {
-          //         isSelection = false;
-          //       }
-          //     });
-          //   } else {
-          //     String filePath = files[i].path;
-          //     Navigator.of(context).push(MaterialPageRoute(
-          //         builder: (context) => ViewPdf(
-          //               documentPath: filePath,
-          //             )));
-          //   }
-          // },
-          // onLongPress: () {
-          //   setState(() {
-          //     isSelection = true;
-          //     selected[i] = selected[i] == true ? false : true;
-          //   });
-          // },
-          // ),
           child: GridTile(
               header: isSelection && selected[i] == true
                   ? Padding(
@@ -360,10 +342,7 @@ class _MainScreenState extends State<MainScreen> {
                         fontWeight: FontWeight.w800,
                         color: Colors.white)),
               ),
-              child: Text(''))
-          //   ],
-          // ),
-          ),
+              child: Text(''))),
       onTap: () {
         if (isSelection) {
           setState(() {
@@ -386,6 +365,61 @@ class _MainScreenState extends State<MainScreen> {
           selected[i] = selected[i] == true ? false : true;
         });
       },
+    );
+  }
+
+  listViewContent(int i) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+              colors: [Colors.deepOrangeAccent, Colors.purpleAccent[700]],
+              end: Alignment.bottomRight,
+              begin: Alignment.topLeft)),
+      child: ListTile(
+        selected: selected[i] != null ? (selected[i] ? true : false) : false,
+        leading: isSelection && selected[i] == true
+            ? CircleAvatar(
+                radius: 25,
+                child: Icon(Icons.done),
+              )
+            : CircleAvatar(
+                radius: 25,
+                backgroundImage: AssetImage('assets/fileIcon.png'),
+              ),
+        title: Text(
+          '${files[i].path.split('/').removeLast()}',
+          style: GoogleFonts.philosopher(
+              textStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white)),
+        ),
+        onTap: () {
+          if (isSelection) {
+            setState(() {
+              selected[i] = selected[i] == true ? false : true;
+              if (selected.isEmpty) {
+                isSelection = false;
+              }
+            });
+          } else {
+            String filePath = files[i].path;
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ViewPdf(
+                      documentPath: filePath,
+                    )));
+          }
+        },
+        onLongPress: () {
+          setState(() {
+            isSelection = true;
+            selected[i] = selected[i] == true ? false : true;
+          });
+        },
+      ),
     );
   }
 
