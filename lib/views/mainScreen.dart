@@ -140,6 +140,8 @@ class _MainScreenState extends State<MainScreen> {
                       //   backgroundImage:
                       //       AssetImage('assets/indocanner-logo.png'),
                       // ),
+                      accountName: Text(''),
+                      accountEmail: Text(''),
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage('assets/indocanner-logo.png'),

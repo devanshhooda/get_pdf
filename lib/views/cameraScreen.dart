@@ -53,9 +53,9 @@ class CameraScreenState extends State<CameraScreen> {
                   CircleAvatar(
                     backgroundColor: Colors.deepOrange,
                     radius: 30,
-                    // backgroundImage: images.length > 0
-                    //     ? AssetImage(images[images.length - 1].path)
-                    //     : null,
+                    backgroundImage: images.length > 0
+                        ? AssetImage(images[images.length - 1].path)
+                        : null,
                     child: Text(
                       images.length.toString(),
                       style: TextStyle(
@@ -78,9 +78,12 @@ class CameraScreenState extends State<CameraScreen> {
                                     .toString() +
                                 '.jpg');
                         try {
-                          await cameraController.takePicture(image.path);
-                          images.add(image);
-                          setState(() {});
+                          await cameraController
+                              .takePicture(image.path)
+                              .whenComplete(() {
+                            images.add(image);
+                            setState(() {});
+                          });
                         } on CameraException catch (e) {
                           print(e);
                         }
