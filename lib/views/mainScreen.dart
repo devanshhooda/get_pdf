@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
 import 'package:get_pdf/utils/colors.dart';
@@ -205,7 +206,7 @@ class _MainScreenState extends State<MainScreen> {
                                   children: isListView
                                       ? <Widget>[
                                           Text('Grid View'),
-                                          Icon(Icons.grid_on)
+                                          Icon(Icons.view_module)
                                         ]
                                       : <Widget>[
                                           Text('List View'),
@@ -241,59 +242,57 @@ class _MainScreenState extends State<MainScreen> {
                 style: TextStyle(color: Colors.grey),
               ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(5),
-            child: FloatingActionButton(
-              backgroundColor: Colors.purpleAccent[900],
-              heroTag: "gallery",
-              onPressed: () async {
-                await imageServices.pickImages().then((imagesList) {
-                  print(imagesList);
-                  if (imagesList != null && imagesList.isNotEmpty) {
-                    setState(() {
-                      images = imagesList;
-                    });
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                            builder: (context) => PreviewPage(
-                                  imageList: images,
-                                )))
-                        .then((_) {
-                      setState(() {
-                        files = handler.allFiles();
-                        files.sort((a, b) => b.path.compareTo(a.path));
-                        if (files != null && files.isNotEmpty) {
-                          selected = List<bool>(files.length);
-                          filesPresent = true;
-                        }
-                      });
-                    });
-                  }
-                });
-              },
-              child: Icon(
-                Icons.add_photo_alternate,
-                // color: Colors.white,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(5),
-            child: FloatingActionButton(
-              heroTag: "camera",
-              onPressed: () {
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        curve: Curves.easeInSine,
+        backgroundColor: Colors.deepOrange,
+        overlayColor: Colors.orangeAccent,
+        overlayOpacity: 0.4,
+        children: [
+          SpeedDialChild(
+            label: 'Take pictures using Camera',
+            labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+            labelBackgroundColor: Colors.deepOrange,
+            child: Icon(Icons.photo_camera),
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => CameraScreen()))
+                  .then((images) {
+                print(images);
+                if (images.length == 0) return;
                 Navigator.of(context)
-                    .push(
-                        MaterialPageRoute(builder: (context) => CameraScreen()))
-                    .then((images) {
-                  print(images);
-                  if (images.length == 0) return;
+                    .push(MaterialPageRoute(
+                        builder: (context) => PreviewPage(imageList: images)))
+                    .then((_) {
+                  setState(() {
+                    files = handler.allFiles();
+                    files.sort((a, b) => b.path.compareTo(a.path));
+                    if (files != null && files.isNotEmpty) {
+                      selected = List<bool>(files.length);
+                      filesPresent = true;
+                    }
+                  });
+                });
+              });
+            },
+          ),
+          SpeedDialChild(
+            label: 'Import images from Gallery',
+            labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+            labelBackgroundColor: Colors.deepOrange,
+            child: Icon(Icons.add_photo_alternate),
+            onTap: () async {
+              await imageServices.pickImages().then((imagesList) {
+                print(imagesList);
+                if (imagesList != null && imagesList.isNotEmpty) {
+                  setState(() {
+                    images = imagesList;
+                  });
                   Navigator.of(context)
                       .push(MaterialPageRoute(
-                          builder: (context) => PreviewPage(imageList: images)))
+                          builder: (context) => PreviewPage(
+                                imageList: images,
+                              )))
                       .then((_) {
                     setState(() {
                       files = handler.allFiles();
@@ -304,13 +303,9 @@ class _MainScreenState extends State<MainScreen> {
                       }
                     });
                   });
-                });
-              },
-              child: Icon(
-                Icons.photo_camera,
-                // color: Colors.white,
-              ),
-            ),
+                }
+              });
+            },
           ),
         ],
       ),

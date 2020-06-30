@@ -55,7 +55,6 @@ class _ViewPdfState extends State<ViewPdf> {
                           children: <Widget>[
                             Text(
                               'Share',
-                              // style: TextStyle(fontSize: 20),
                             ),
                             Icon(
                               Icons.share,
@@ -77,7 +76,6 @@ class _ViewPdfState extends State<ViewPdf> {
                                   onChanged: (val) {
                                     darkPdf = val;
                                     setState(() {});
-                                    // context.findAncestorStateOfType().setState(() {});
                                   })
                             ],
                           )),
@@ -169,8 +167,4 @@ class _ViewPdfState extends State<ViewPdf> {
       ),
     );
   }
-
-  // PopupMenuItem popUpButton(String buttonName, IconData iconData) {
-  //   return
-  // }
 }

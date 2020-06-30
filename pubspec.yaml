@@ -21,6 +21,7 @@ dependencies:
   share_extend: ^1.1.7
   camera: ^0.5.8+2
   shared_preferences: ^0.5.7+3
+  flutter_speed_dial: ^1.2.5
 
 dev_dependencies:
   flutter_test:
