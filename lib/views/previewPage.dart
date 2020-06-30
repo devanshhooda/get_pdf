@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_editor_pro/image_editor_pro.dart';
+// import 'package:image_editor_pro/image_editor_pro.dart';
 
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
@@ -74,31 +73,56 @@ class _PreviewPageState extends State<PreviewPage> {
             gridDelegate:
                 SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             itemBuilder: (context, i) {
-              return GestureDetector(
-                onTap: () {
-                  if (isSelection) {
-                    setState(() {
-                      selected[i] = selected[i] == true ? false : true;
-                    });
-                  } else {
-                    getImageEditor(widget.imageList[i]);
-                  }
-                },
-                onLongPress: () {
-                  setState(() {
-                    selected[i] = selected[i] == true ? false : true;
-                    isSelection = true;
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.all(2),
-                  color: isSelection && selected[i] == true
-                      ? Colors.orange
-                      : Colors.white,
-                  child: Image.file(
-                    widget.imageList[i],
-                    fit: BoxFit.contain,
+              return DragTarget(
+                // onWillAccept: (File file) {
+                //   return true;
+                // },
+                // onAccept: (File file) {
+                //   widget.imageList.remove(file);
+                // },
+                builder: (context, incomingData, outgoingData) => Draggable(
+                  data: widget.imageList,
+                  maxSimultaneousDrags: 1,
+                  feedback: Opacity(
+                    opacity: 0.7,
+                    child: Material(
+                      child: Container(
+                        height: 200,
+                        color: Colors.orange,
+                        child: Image.file(
+                          widget.imageList[i],
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (isSelection) {
+                        setState(() {
+                          selected[i] = selected[i] == true ? false : true;
+                        });
+                      } else {
+                        // getImageEditor(widget.imageList[i]);
+                      }
+                    },
+                    onDoubleTap: () {
+                      setState(() {
+                        selected[i] = selected[i] == true ? false : true;
+                        isSelection = true;
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(2),
+                      color: isSelection && selected[i] == true
+                          ? Colors.orange
+                          : Colors.white,
+                      child: Image.file(
+                        widget.imageList[i],
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
               );
@@ -136,21 +160,21 @@ class _PreviewPageState extends State<PreviewPage> {
     );
   }
 
-  Future<void> getImageEditor(File _image) {
-    getEditImage =
-        Navigator.push(context, CupertinoPageRoute(builder: (context) {
-      return ImageEditorPro(
-        appBarColor: Colors.deepOrange,
-        bottomBarColor: Colors.deepOrange,
-      );
-    })).then((getEditImage) {
-      if (getEditImage != null) {
-        setState(() {
-          _image = getEditImage;
-        });
-      }
-    }).catchError((err) {
-      print(err);
-    });
-  }
+  // Future<void> getImageEditor(File _image) {
+  //   getEditImage =
+  //       Navigator.push(context, CupertinoPageRoute(builder: (context) {
+  //     return ImageEditorPro(
+  //       appBarColor: Colors.deepOrange,
+  //       bottomBarColor: Colors.deepOrange,
+  //     );
+  //   })).then((getEditImage) {
+  //     if (getEditImage != null) {
+  //       setState(() {
+  //         _image = getEditImage;
+  //       });
+  //     }
+  //   }).catchError((err) {
+  //     print(err);
+  //   });
+  // }
 }

@@ -53,9 +53,9 @@ class CameraScreenState extends State<CameraScreen> {
                   CircleAvatar(
                     backgroundColor: Colors.deepOrange,
                     radius: 30,
-                    backgroundImage: images.length > 0
-                        ? AssetImage(images[images.length - 1].path)
-                        : null,
+                    // backgroundImage: images.length > 0
+                    //     ? AssetImage(images[images.length - 1].path)
+                    //     : null,
                     child: Text(
                       images.length.toString(),
                       style: TextStyle(
@@ -116,13 +116,13 @@ class CameraScreenState extends State<CameraScreen> {
 
   camerInitialisation() async {
     // try {
-      cameras = await availableCameras();
-      cameraController = CameraController(cameras[0], ResolutionPreset.max);
-      await cameraController.initialize();
-      await handler.initSystem();
-      setState(() {
-        // TODO: anything
-      });
+    cameras = await availableCameras();
+    cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    await cameraController.initialize();
+    await handler.initSystem();
+    setState(() {
+      // TODO: anything
+    });
     // } catch (e) {
     //   print(e);
     // }

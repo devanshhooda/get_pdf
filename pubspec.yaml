@@ -12,7 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^1.1.0
-  image_editor_pro: ^1.0.6
   flutter_pdfview: ^1.0.0+10
   cupertino_icons: ^0.1.3
   pdf: ^1.8.1
@@ -33,7 +32,7 @@ flutter:
 
   assets:
     - assets/fileIcon.png
-    - assets/appIcon.jpg
+    - assets/indocanner-logo.png
   #   - images/a_dot_ham.jpeg
 
   # fonts:

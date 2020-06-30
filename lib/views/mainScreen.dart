@@ -123,26 +123,30 @@ class _MainScreenState extends State<MainScreen> {
                 child: ListView(
                   children: <Widget>[
                     UserAccountsDrawerHeader(
-                      accountName: Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Text(
-                          'Indocanner',
-                          style: GoogleFonts.righteous(
-                              textStyle: TextStyle(fontSize: 30)),
-                        ),
-                      ),
-                      accountEmail: Text(
-                        'Convert your images into PDF',
-                        style: GoogleFonts.sofadiOne(),
-                      ),
-                      currentAccountPicture: CircleAvatar(
-                        backgroundImage: AssetImage('assets/appIcon.jpg'),
-                      ),
+                      // accountName: Padding(
+                      //   padding: EdgeInsets.only(top: 20),
+                      //   child: Text(
+                      //     'Indocanner',
+                      //     style: GoogleFonts.righteous(
+                      //         textStyle: TextStyle(fontSize: 30)),
+                      //   ),
+                      // ),
+                      // accountEmail: Text(
+                      //   'Convert your images into PDF',
+                      //   style: GoogleFonts.sofadiOne(),
+                      // ),
+                      // currentAccountPicture: CircleAvatar(
+                      //   backgroundImage:
+                      //       AssetImage('assets/indocanner-logo.png'),
+                      // ),
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [Colors.red, Colors.yellow],
-                              begin: Alignment.topLeft,
-                              end: Alignment.centerRight),
+                          image: DecorationImage(
+                              image: AssetImage('assets/indocanner-logo.png'),
+                              fit: BoxFit.cover),
+                          // gradient: LinearGradient(
+                          //     colors: [Colors.red, Colors.yellow],
+                          //     begin: Alignment.topLeft,
+                          //     end: Alignment.centerRight),
                           borderRadius: BorderRadius.only(
                               bottomRight: Radius.circular(40))),
                     ),
@@ -243,6 +247,7 @@ class _MainScreenState extends State<MainScreen> {
           Padding(
             padding: EdgeInsets.all(5),
             child: FloatingActionButton(
+              backgroundColor: Colors.purpleAccent[900],
               heroTag: "gallery",
               onPressed: () async {
                 await imageServices.pickImages().then((imagesList) {

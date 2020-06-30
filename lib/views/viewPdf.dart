@@ -76,8 +76,8 @@ class _ViewPdfState extends State<ViewPdf> {
                                   value: darkPdf,
                                   onChanged: (val) {
                                     darkPdf = val;
-                                    // setState(() {});
-                                    context.findAncestorStateOfType().setState(() {});
+                                    setState(() {});
+                                    // context.findAncestorStateOfType().setState(() {});
                                   })
                             ],
                           )),
@@ -158,10 +158,9 @@ class _ViewPdfState extends State<ViewPdf> {
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: Text(
-                '$pageNo/$totalPages',
+                '${pageNo + 1}/$totalPages',
                 style: TextStyle(
                   color: Colors.black,
-                  // backgroundColor: Colors.white
                 ),
               ),
             ),
