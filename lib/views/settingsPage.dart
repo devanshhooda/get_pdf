@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_pdf/utils/constants.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -8,11 +9,12 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool isDark = true;
   double _value = 0;
+  SharedPreferences prefs;
 
   @override
   void initState() {
+    initSP();
     super.initState();
   }
 
@@ -31,7 +33,8 @@ class _SettingsPageState extends State<SettingsPage> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(10),
-              child: Text('Camera resolution : '),
+              child: Text(
+                  'Camera resolution : ${Constants.resolutions[_value.floor()]}'),
             ),
             Container(
               decoration: BoxDecoration(
@@ -64,19 +67,35 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Slider(
                     value: _value,
                     onChanged: (val) {
-                      setState(() {
-                        _value = val;
-                      });
+                      onChangeResolution(val);
                     },
-                    label: '$_value',
-                    divisions: 10,
+                    label: Constants.resolutions[_value.floor()],
+                    divisions: 5,
                     min: 0,
-                    max: 100,
+                    max: 5,
                   )),
             ),
           ],
         ),
       ),
     );
+  }
+
+  onChangeResolution(value) async {
+    if (prefs == null) {
+      prefs = await SharedPreferences.getInstance();
+    }
+    prefs.setInt(Constants.cameraResolution, value.floor());
+    setState(() {
+      _value = value;
+    });
+  }
+
+  initSP() async {
+    prefs = await SharedPreferences.getInstance();
+    int resol = prefs.getInt(Constants.cameraResolution) ?? 0;
+    setState(() {
+      _value = resol.toDouble();
+    });
   }
 }

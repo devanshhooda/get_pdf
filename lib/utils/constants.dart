@@ -4,4 +4,13 @@ class Constants {
   static String temp = '.temp';
   static String greet = 'Hello World!';
   static String base = 'GetPDF ';
+  static List<String> resolutions = [
+    'Low',
+    'Medium',
+    'High',
+    'Very High',
+    'Ultra High',
+    'Max'
+  ];
+  static String cameraResolution = 'resolution';
 }

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get_pdf/services/fileHandling.dart';
+import 'package:get_pdf/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CameraScreen extends StatefulWidget {
   CameraScreenState createState() => CameraScreenState();
@@ -118,9 +120,11 @@ class CameraScreenState extends State<CameraScreen> {
   }
 
   camerInitialisation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int resol = prefs.getInt(Constants.cameraResolution) ?? 0;
     // try {
     cameras = await availableCameras();
-    cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    cameraController = CameraController(cameras[0], getResol(resol));
     await cameraController.initialize();
     await handler.initSystem();
     setState(() {
@@ -129,5 +133,24 @@ class CameraScreenState extends State<CameraScreen> {
     // } catch (e) {
     //   print(e);
     // }
+  }
+
+  ResolutionPreset getResol(val) {
+    switch (val) {
+      case 0:
+        return ResolutionPreset.low;
+      case 1:
+        return ResolutionPreset.medium;
+      case 2:
+        return ResolutionPreset.high;
+      case 3:
+        return ResolutionPreset.veryHigh;
+      case 4:
+        return ResolutionPreset.ultraHigh;
+      case 5:
+        return ResolutionPreset.max;
+      default:
+        return ResolutionPreset.low;
+    }
   }
 }
