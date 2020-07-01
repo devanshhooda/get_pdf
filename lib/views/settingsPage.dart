@@ -46,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       colors: [Colors.grey, Colors.blueGrey[400]],
                       begin: Alignment.bottomLeft,
                       end: Alignment.topRight)),
-              margin: EdgeInsets.all(20),
+              margin: EdgeInsets.all(20), // don't change this ever
               child: SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                       activeTrackColor: Colors.red[700],

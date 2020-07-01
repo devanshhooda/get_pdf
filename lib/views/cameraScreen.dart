@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get_pdf/services/fileHandling.dart';
@@ -38,75 +37,96 @@ class CameraScreenState extends State<CameraScreen> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        body: Column(
+        body: Stack(
+          fit: StackFit.expand,
           children: <Widget>[
-            Expanded(
-              flex: 10,
-              child: AspectRatio(
-                aspectRatio: cameraController.value.aspectRatio,
-                child: CameraPreview(cameraController),
+            // Expanded(
+            //   flex: 10,
+            //   child:
+            AspectRatio(
+              aspectRatio: cameraController.value.aspectRatio,
+              child: CameraPreview(cameraController),
+            ),
+            // ),
+            Positioned(
+              bottom: 825,
+              left: 20,
+              child: CircleAvatar(
+                backgroundColor: Colors.black26,
+                radius: 20,
+                child: IconButton(
+                    iconSize: 25,
+                    icon: Icon(Icons.keyboard_arrow_down),
+                    onPressed: () {
+                      Navigator.pop(context, images);
+                    }),
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundColor: Colors.deepOrange,
-                    radius: 30,
-                    backgroundImage: images.length > 0
-                        ? AssetImage(images[images.length - 1].path)
-                        : null,
-                    child: Text(
-                      images.length.toString(),
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
+            Positioned(
+              top: 850,
+              left: 50,
+              // child: Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: <Widget>[
+              child: CircleAvatar(
+                backgroundColor: Colors.deepOrange,
+                radius: 30,
+                backgroundImage: images.length > 0
+                    ? AssetImage(images[images.length - 1].path)
+                    : null,
+                child: Text(
+                  images.length.toString(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
                   ),
-                  CircleAvatar(
-                    backgroundColor: Colors.deepOrange,
-                    radius: 30,
-                    child: IconButton(
-                      iconSize: 30,
-                      color: Colors.white,
-                      icon: Icon(Icons.photo_camera),
-                      onPressed: () async {
-                        File image = handler.getTempFile(
-                            name: DateTime.now()
-                                    .millisecondsSinceEpoch
-                                    .toString() +
-                                '.jpg');
-                        try {
-                          await cameraController
-                              .takePicture(image.path)
-                              .whenComplete(() {
-                            images.add(image);
-                            setState(() {});
-                          });
-                        } on CameraException catch (e) {
-                          print(e);
-                        }
-                      },
-                    ),
-                  ),
-                  CircleAvatar(
-                    backgroundColor: Colors.deepOrange,
-                    radius: 30,
-                    child: IconButton(
-                      color: Colors.white,
-                      iconSize: 25,
-                      icon: Icon(Icons.done),
-                      onPressed: () {
-                        Navigator.pop(context, images);
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
-            )
+            ),
+            Positioned(
+              top: 850,
+              left: 180,
+              child: CircleAvatar(
+                backgroundColor: Colors.deepOrange,
+                radius: 30,
+                child: IconButton(
+                  iconSize: 30,
+                  color: Colors.white,
+                  icon: Icon(Icons.camera),
+                  onPressed: () async {
+                    File image = handler.getTempFile(
+                        name: DateTime.now().millisecondsSinceEpoch.toString() +
+                            '.jpg');
+                    try {
+                      await cameraController
+                          .takePicture(image.path)
+                          .whenComplete(() {
+                        images.add(image);
+                        setState(() {});
+                      });
+                    } on CameraException catch (e) {
+                      print(e);
+                    }
+                  },
+                ),
+              ),
+            ),
+            Positioned(
+              top: 850,
+              left: 310,
+              child: CircleAvatar(
+                backgroundColor: Colors.deepOrange,
+                radius: 30,
+                child: IconButton(
+                  color: Colors.white,
+                  iconSize: 25,
+                  icon: Icon(Icons.done),
+                  onPressed: () {
+                    Navigator.pop(context, images);
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -122,17 +142,11 @@ class CameraScreenState extends State<CameraScreen> {
   camerInitialisation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int resol = prefs.getInt(Constants.cameraResolution) ?? 0;
-    // try {
     cameras = await availableCameras();
     cameraController = CameraController(cameras[0], getResol(resol));
     await cameraController.initialize();
     await handler.initSystem();
-    setState(() {
-      // TODO: anything
-    });
-    // } catch (e) {
-    //   print(e);
-    // }
+    setState(() {});
   }
 
   ResolutionPreset getResol(val) {

@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:image_editor_pro/image_editor_pro.dart';
-
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
 
@@ -135,9 +133,13 @@ class _PreviewPageState extends State<PreviewPage> {
               context: context,
               barrierDismissible: false,
               builder: (context) {
-                return Container(
-                  child: Center(
-                    child: CircularProgressIndicator(),
+                return AlertDialog(
+                  // contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                  content: Row(
+                    children: <Widget>[
+                      Text('Preparing document, please wait   '),
+                      CircularProgressIndicator(),
+                    ],
                   ),
                 );
               });
@@ -159,22 +161,4 @@ class _PreviewPageState extends State<PreviewPage> {
       ),
     );
   }
-
-  // Future<void> getImageEditor(File _image) {
-  //   getEditImage =
-  //       Navigator.push(context, CupertinoPageRoute(builder: (context) {
-  //     return ImageEditorPro(
-  //       appBarColor: Colors.deepOrange,
-  //       bottomBarColor: Colors.deepOrange,
-  //     );
-  //   })).then((getEditImage) {
-  //     if (getEditImage != null) {
-  //       setState(() {
-  //         _image = getEditImage;
-  //       });
-  //     }
-  //   }).catchError((err) {
-  //     print(err);
-  //   });
-  // }
 }

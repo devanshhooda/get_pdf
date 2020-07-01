@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'views/mainScreen.dart';
@@ -18,7 +17,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   bool isDark = true;
 
   @override

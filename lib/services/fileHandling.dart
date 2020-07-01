@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file/file.dart' as FILE;
 import 'package:file/local.dart';
 import 'package:get_pdf/utils/constants.dart';

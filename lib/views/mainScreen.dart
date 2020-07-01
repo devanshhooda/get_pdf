@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
-import 'package:get_pdf/utils/colors.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/settingsPage.dart';
@@ -28,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   List<bool> selected = [];
   bool isSelection = false;
   bool isDark;
-  bool isListView = false;
+  bool isListView;
   SharedPreferences prefs;
 
   @override
@@ -110,8 +108,10 @@ class _MainScreenState extends State<MainScreen> {
                   borderRadius: BorderRadius.circular(25)),
               title: Text(
                 "Indocanner",
-                style:
-                    GoogleFonts.righteous(textStyle: TextStyle(fontSize: 30)),
+                style: GoogleFonts.anton(
+                    textStyle: TextStyle(fontSize: 30),
+                    fontStyle: FontStyle.italic,
+                    letterSpacing: 4),
               ),
               centerTitle: true,
             ),
@@ -124,41 +124,24 @@ class _MainScreenState extends State<MainScreen> {
                 child: ListView(
                   children: <Widget>[
                     UserAccountsDrawerHeader(
-                      // accountName: Padding(
-                      //   padding: EdgeInsets.only(top: 20),
-                      //   child: Text(
-                      //     'Indocanner',
-                      //     style: GoogleFonts.righteous(
-                      //         textStyle: TextStyle(fontSize: 30)),
-                      //   ),
-                      // ),
-                      // accountEmail: Text(
-                      //   'Convert your images into PDF',
-                      //   style: GoogleFonts.sofadiOne(),
-                      // ),
-                      // currentAccountPicture: CircleAvatar(
-                      //   backgroundImage:
-                      //       AssetImage('assets/indocanner-logo.png'),
-                      // ),
                       accountName: Text(''),
                       accountEmail: Text(''),
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage('assets/indocanner-logo.png'),
                               fit: BoxFit.cover),
-                          // gradient: LinearGradient(
-                          //     colors: [Colors.red, Colors.yellow],
-                          //     begin: Alignment.topLeft,
-                          //     end: Alignment.centerRight),
                           borderRadius: BorderRadius.only(
                               bottomRight: Radius.circular(40))),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Text('Dark mode',
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold)),
+                        Text(
+                          'Dark mode',
+                          style: GoogleFonts.amaranth(
+                              textStyle: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                        ),
                         Switch(
                             value: isDark,
                             onChanged: (val) async {
@@ -189,7 +172,7 @@ class _MainScreenState extends State<MainScreen> {
                     Expanded(
                       flex: 0,
                       child: Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
+                        padding: EdgeInsets.only(left: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -198,11 +181,12 @@ class _MainScreenState extends State<MainScreen> {
                               style: GoogleFonts.amaranth(
                                   textStyle: TextStyle(
                                       fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.w500)),
                             ),
                             FlatButton(
                                 onPressed: () {
                                   isListView = !isListView;
+                                  prefs.setBool("isListView", isListView);
                                 },
                                 child: Row(
                                   children: isListView
@@ -330,7 +314,7 @@ class _MainScreenState extends State<MainScreen> {
                   ? Padding(
                       padding: EdgeInsets.only(right: 100),
                       child: CircleAvatar(
-                        backgroundColor: Colors.purpleAccent,
+                        backgroundColor: Colors.deepPurple,
                         radius: 25,
                         child: Icon(Icons.done),
                       ),
@@ -338,11 +322,8 @@ class _MainScreenState extends State<MainScreen> {
                   : null,
               footer: Text(
                 '${files[i].path.split('/').removeLast()}',
-                style: GoogleFonts.philosopher(
-                    textStyle: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white)),
+                style: TextStyle(color: Colors.white),
+                textScaleFactor: 1.2,
               ),
               child: Text(''))),
       onTap: () {
@@ -393,11 +374,8 @@ class _MainScreenState extends State<MainScreen> {
               ),
         title: Text(
           '${files[i].path.split('/').removeLast()}',
-          style: GoogleFonts.philosopher(
-              textStyle: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white)),
+          textScaleFactor: 1.2,
+          style: TextStyle(color: Colors.white),
         ),
         onTap: () {
           if (isSelection) {
@@ -501,6 +479,7 @@ class _MainScreenState extends State<MainScreen> {
   initSP() async {
     prefs = await SharedPreferences.getInstance();
     isDark = prefs.getBool("isDark") ?? true;
+    isListView = prefs.getBool("isListView");
     setState(() {});
   }
 }
