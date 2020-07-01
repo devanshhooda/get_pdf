@@ -32,18 +32,21 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(20),
               child: Text(
-                  'Camera resolution : ${Constants.resolutions[_value.floor()]}'),
+                'Camera Quality : ${Constants.resolutions[_value.floor()]}',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
             ),
             Container(
+              height: 70,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.circular(20),
                   gradient: LinearGradient(
-                      colors: [Colors.white, Colors.deepOrangeAccent],
+                      colors: [Colors.grey, Colors.blueGrey[400]],
                       begin: Alignment.bottomLeft,
                       end: Alignment.topRight)),
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              margin: EdgeInsets.all(20),
               child: SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                       activeTrackColor: Colors.red[700],
