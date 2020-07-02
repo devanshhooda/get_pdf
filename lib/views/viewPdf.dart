@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:share_extend/share_extend.dart';
 
 class ViewPdf extends StatefulWidget {
@@ -30,7 +29,6 @@ class _ViewPdfState extends State<ViewPdf> {
         backgroundColor: Colors.deepOrangeAccent,
         title: Text(
           '$fileName',
-          style: GoogleFonts.cantoraOne(),
         ),
         actions: <Widget>[
           Container(
@@ -121,7 +119,7 @@ class _ViewPdfState extends State<ViewPdf> {
             filePath: path,
             enableSwipe: true,
             swipeHorizontal: mobileView,
-            autoSpacing: true,
+            autoSpacing: spacing,
             pageFling: false,
             fitEachPage: false,
             fitPolicy: FitPolicy.BOTH,
@@ -156,7 +154,7 @@ class _ViewPdfState extends State<ViewPdf> {
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: Text(
-                '${pageNo + 1}/$totalPages',
+                totalPages != null ? '${pageNo + 1}/$totalPages' : '',
                 style: TextStyle(
                   color: Colors.black,
                 ),

@@ -40,14 +40,10 @@ class CameraScreenState extends State<CameraScreen> {
         body: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            // Expanded(
-            //   flex: 10,
-            //   child:
             AspectRatio(
               aspectRatio: cameraController.value.aspectRatio,
               child: CameraPreview(cameraController),
             ),
-            // ),
             Positioned(
               bottom: 825,
               left: 20,
@@ -65,9 +61,6 @@ class CameraScreenState extends State<CameraScreen> {
             Positioned(
               top: 850,
               left: 50,
-              // child: Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: <Widget>[
               child: CircleAvatar(
                 backgroundColor: Colors.deepOrange,
                 radius: 30,
@@ -76,8 +69,8 @@ class CameraScreenState extends State<CameraScreen> {
                     : null,
                 child: Text(
                   images.length.toString(),
+                  textScaleFactor: 1.5,
                   style: TextStyle(
-                    fontSize: 20,
                     color: Colors.white,
                   ),
                 ),

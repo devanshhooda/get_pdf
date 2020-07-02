@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
@@ -53,6 +54,9 @@ class _PreviewPageState extends State<PreviewPage> {
                     }
                     isSelection = false;
                     selected = List<bool>(widget.imageList.length);
+                    if (widget.imageList.isEmpty) {
+                      Navigator.of(context).pop();
+                    }
                     setState(() {});
                   },
                 )
@@ -62,8 +66,37 @@ class _PreviewPageState extends State<PreviewPage> {
               backgroundColor: Colors.deepOrangeAccent,
               title: Text(
                 'Selected images',
-                style: GoogleFonts.cantoraOne(),
+                style: GoogleFonts.amaranth(),
               ),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.picture_as_pdf),
+                    onPressed: () async {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Row(
+                                children: <Widget>[
+                                  Text('Preparing document, please wait   '),
+                                  CircularProgressIndicator(),
+                                ],
+                              ),
+                            );
+                          });
+                      String filename = await pdfServices
+                          .createPdfFromImages(widget.imageList);
+                      Navigator.of(context).pop();
+                      if (filename == null) return;
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(
+                              builder: (context) => ViewPdf(
+                                    documentPath: filename,
+                                  )))
+                          .then((value) => Navigator.of(context).pop());
+                    })
+              ],
             ),
       body: Container(
         child: GridView.builder(
@@ -126,38 +159,72 @@ class _PreviewPageState extends State<PreviewPage> {
               );
             }),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        curve: Curves.easeInSine,
         backgroundColor: Colors.deepOrange,
-        onPressed: () async {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return AlertDialog(
-                  // contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                  content: Row(
-                    children: <Widget>[
-                      Text('Preparing document, please wait   '),
-                      CircularProgressIndicator(),
-                    ],
-                  ),
-                );
-              });
-          String filename =
-              await pdfServices.createPdfFromImages(widget.imageList);
-          Navigator.of(context).pop();
-          if (filename == null) return;
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => ViewPdf(
-                        documentPath: filename,
-                      )))
-              .then((value) => Navigator.of(context).pop());
-        },
-        child: Icon(
-          Icons.picture_as_pdf,
-          color: Colors.white,
-        ),
+        overlayColor: Colors.orangeAccent,
+        overlayOpacity: 0.4,
+        children: [
+          SpeedDialChild(
+            label: 'Take pictures using Camera',
+            labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+            labelBackgroundColor: Colors.deepOrange,
+            child: Icon(Icons.photo_camera),
+            onTap: () {
+              // Navigator.of(context)
+              //     .push(MaterialPageRoute(builder: (context) => CameraScreen()))
+              //     .then((images) {
+              //   print(images);
+              //   if (images.length == 0) return;
+              //   Navigator.of(context)
+              //       .push(MaterialPageRoute(
+              //           builder: (context) => PreviewPage(imageList: images)))
+              //       .then((_) {
+              //     setState(() {
+              //       files = handler.allFiles();
+              //       files.sort((a, b) => b.path.compareTo(a.path));
+              //       if (files != null && files.isNotEmpty) {
+              //         selected = List<bool>(files.length);
+              //         filesPresent = true;
+              //       }
+              //     });
+              //   });
+              // });
+            },
+          ),
+          SpeedDialChild(
+            label: 'Import images from Gallery',
+            labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+            labelBackgroundColor: Colors.deepOrange,
+            child: Icon(Icons.add_photo_alternate),
+            onTap: () async {
+              // await imageServices.pickImages().then((imagesList) {
+              //   print(imagesList);
+              //   if (imagesList != null && imagesList.isNotEmpty) {
+              //     setState(() {
+              //       images = imagesList;
+              //     });
+              //     Navigator.of(context)
+              //         .push(MaterialPageRoute(
+              //             builder: (context) => PreviewPage(
+              //                   imageList: images,
+              //                 )))
+              //         .then((_) {
+              //       setState(() {
+              //         files = handler.allFiles();
+              //         files.sort((a, b) => b.path.compareTo(a.path));
+              //         if (files != null && files.isNotEmpty) {
+              //           selected = List<bool>(files.length);
+              //           filesPresent = true;
+              //         }
+              //       });
+              //     });
+              //   }
+              // });
+            },
+          ),
+        ],
       ),
     );
   }

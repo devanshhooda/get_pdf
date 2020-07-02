@@ -25,7 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Colors.deepOrange,
         title: Text(
           'Settings',
-          style: GoogleFonts.cantoraOne(),
+          style: GoogleFonts.amaranth(),
         ),
       ),
       body: Container(
@@ -35,7 +35,8 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: EdgeInsets.all(20),
               child: Text(
                 'Camera Quality : ${Constants.resolutions[_value.floor()]}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                textScaleFactor: 1.4,
+                style: TextStyle(fontWeight: FontWeight.w500),
               ),
             ),
             Container(
@@ -96,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   initSP() async {
     prefs = await SharedPreferences.getInstance();
-    int resol = prefs.getInt(Constants.cameraResolution) ?? 0;
+    int resol = prefs.getInt(Constants.cameraResolution) ?? 3;
     setState(() {
       _value = resol.toDouble();
     });

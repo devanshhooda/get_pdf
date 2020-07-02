@@ -48,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(25),
-                      topLeft: Radius.circular(25))),
+                      bottomRight: Radius.circular(25))),
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
@@ -105,13 +105,14 @@ class _MainScreenState extends State<MainScreen> {
           : AppBar(
               backgroundColor: Colors.deepOrangeAccent,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25)),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25))),
               title: Text(
                 "Indocanner",
+                textScaleFactor: 1.45,
                 style: GoogleFonts.anton(
-                    textStyle: TextStyle(fontSize: 30),
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 4),
+                    fontStyle: FontStyle.italic, letterSpacing: 4),
               ),
               centerTitle: true,
             ),
@@ -138,9 +139,10 @@ class _MainScreenState extends State<MainScreen> {
                       children: <Widget>[
                         Text(
                           'Dark mode',
+                          textScaleFactor: 1.5,
                           style: GoogleFonts.amaranth(
-                              textStyle: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                              textStyle:
+                                  TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Switch(
                             value: isDark,
@@ -165,63 +167,60 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Center(
         child: filesPresent
-            ? Padding(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 0,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Your files :',
-                              style: GoogleFonts.amaranth(
-                                  textStyle: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                            FlatButton(
-                                onPressed: () {
-                                  isListView = !isListView;
-                                  prefs.setBool("isListView", isListView);
-                                },
-                                child: Row(
-                                  children: isListView
-                                      ? <Widget>[
-                                          Text('Grid View'),
-                                          Icon(Icons.view_module)
-                                        ]
-                                      : <Widget>[
-                                          Text('List View'),
-                                          Icon(Icons.list)
-                                        ],
-                                ))
-                          ],
-                        ),
+            ? Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Your files :',
+                            textScaleFactor: 1.3,
+                            style: GoogleFonts.amaranth(
+                                textStyle:
+                                    TextStyle(fontWeight: FontWeight.w500)),
+                          ),
+                          FlatButton(
+                              onPressed: () {
+                                isListView = !isListView;
+                                prefs.setBool("isListView", isListView);
+                              },
+                              child: Row(
+                                children: isListView
+                                    ? <Widget>[
+                                        Text('Grid View'),
+                                        Icon(Icons.view_module)
+                                      ]
+                                    : <Widget>[
+                                        Text('List View'),
+                                        Icon(Icons.list)
+                                      ],
+                              ))
+                        ],
                       ),
                     ),
-                    Expanded(
-                      flex: 10,
-                      child: isListView
-                          ? ListView.builder(
-                              itemCount: files.length,
-                              itemBuilder: (context, i) {
-                                return listViewContent(i);
-                              })
-                          : GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2),
-                              itemCount: files.length,
-                              itemBuilder: (context, i) {
-                                return gridViewContent(i);
-                              }),
-                    ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    flex: 10,
+                    child: isListView
+                        ? ListView.builder(
+                            itemCount: files.length,
+                            itemBuilder: (context, i) {
+                              return listViewContent(i);
+                            })
+                        : GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2),
+                            itemCount: files.length,
+                            itemBuilder: (context, i) {
+                              return gridViewContent(i);
+                            }),
+                  ),
+                ],
               )
             : Text(
                 'You have no saved files',
@@ -247,7 +246,7 @@ class _MainScreenState extends State<MainScreen> {
                 print(images);
                 if (images.length == 0) return;
                 Navigator.of(context)
-                    .push(MaterialPageRoute(
+                    .push(CupertinoPageRoute(
                         builder: (context) => PreviewPage(imageList: images)))
                     .then((_) {
                   setState(() {
@@ -275,7 +274,7 @@ class _MainScreenState extends State<MainScreen> {
                     images = imagesList;
                   });
                   Navigator.of(context)
-                      .push(MaterialPageRoute(
+                      .push(CupertinoPageRoute(
                           builder: (context) => PreviewPage(
                                 imageList: images,
                               )))
@@ -429,14 +428,10 @@ class _MainScreenState extends State<MainScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(
-                '$buttonName',
-                style:
-                    GoogleFonts.cantoraOne(textStyle: TextStyle(fontSize: 17)),
-              ),
+              Text('$buttonName',
+                  style: GoogleFonts.amaranth(), textScaleFactor: 1.3),
               Icon(
                 icon,
-                size: 25,
               ),
             ],
           ),
