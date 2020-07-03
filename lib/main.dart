@@ -9,6 +9,9 @@ Future<void> main() async {
   runApp(MyApp());
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setEnabledSystemUIOverlays([]);
 }
 
 class MyApp extends StatefulWidget {
