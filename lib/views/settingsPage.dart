@@ -97,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   initSP() async {
     prefs = await SharedPreferences.getInstance();
-    int resol = prefs.getInt(Constants.cameraResolution) ?? 3;
+    int resol = prefs.getInt(Constants.cameraResolution) ?? 2;
     setState(() {
       _value = resol.toDouble();
     });

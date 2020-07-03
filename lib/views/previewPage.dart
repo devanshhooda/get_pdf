@@ -111,9 +111,31 @@ class _PreviewPageState extends State<PreviewPage> {
                 // onAccept: (File file) {
                 //   widget.imageList.remove(file);
                 // },
+                onLeave: (file) {
+                  print('onLeave $i');
+                  print(file);
+                },
+                onAccept: (file) {
+                  print('onAccept $i');
+                  print(file);
+                },
+                onWillAccept: (file) {
+                  print('onWillAccept $i');
+                  print(file);
+                  return true;
+                },
                 builder: (context, incomingData, outgoingData) => Draggable(
-                  data: widget.imageList,
+                  data: widget.imageList[i],
                   maxSimultaneousDrags: 1,
+                  onDragCompleted: () {
+                    print('Drag Complete $i');
+                  },
+                  onDragEnd: (file) {
+                    print('Drag End $i');
+                    print(file.wasAccepted);
+                    print(incomingData);
+                    print(outgoingData);
+                  },
                   feedback: Opacity(
                     opacity: 0.7,
                     child: Material(

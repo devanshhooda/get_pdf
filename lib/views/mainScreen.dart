@@ -474,7 +474,7 @@ class _MainScreenState extends State<MainScreen> {
   initSP() async {
     prefs = await SharedPreferences.getInstance();
     isDark = prefs.getBool("isDark") ?? true;
-    isListView = prefs.getBool("isListView");
+    isListView = prefs.getBool("isListView") ?? false;
     setState(() {});
   }
 }

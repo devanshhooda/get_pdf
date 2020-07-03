@@ -134,7 +134,7 @@ class CameraScreenState extends State<CameraScreen> {
 
   camerInitialisation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int resol = prefs.getInt(Constants.cameraResolution) ?? 0;
+    int resol = prefs.getInt(Constants.cameraResolution) ?? 2;
     cameras = await availableCameras();
     cameraController = CameraController(cameras[0], getResol(resol));
     await cameraController.initialize();

@@ -8,10 +8,14 @@ class ImageServices {
     try {
       imageList = await FilePicker.getMultiFile(
         type: FileType.image,
+        onFileLoading: (value) {
+          print(value);
+        },
       );
       return imageList;
     } catch (e) {
       print(e);
+      return null;
     }
   }
 }
