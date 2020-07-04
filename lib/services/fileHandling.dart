@@ -16,7 +16,8 @@ class FileHandling {
     if (storagePermission && homeDirectory == null) {
       FILE.Directory root = fs.directory(Constants.root);
       homeDirectory = await root.childDirectory(Constants.home).create();
-      tempDirectory = await homeDirectory.childDirectory(Constants.temp).create();
+      tempDirectory =
+          await homeDirectory.childDirectory(Constants.temp).create();
     }
     return storagePermission;
   }

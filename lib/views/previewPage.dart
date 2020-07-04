@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:get_pdf/views/editorPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
@@ -197,7 +198,17 @@ class _PreviewPageState extends State<PreviewPage> {
                           selected[i] = selected[i] == true ? false : true;
                         });
                       } else {
-                        // getImageEditor(widget.imageList[i]);
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (context) =>
+                                    EditImage(widget.imageList[i])))
+                            .then((imageFile) {
+                          if (imageFile != null) {
+                            widget.imageList
+                                .replaceRange(i, i + 1, [imageFile]);
+                            setState(() {});
+                          }
+                        });
                       }
                     },
                     onLongPress: () {
