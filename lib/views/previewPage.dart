@@ -27,129 +27,170 @@ class _PreviewPageState extends State<PreviewPage> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: isSelection
-          ? AppBar(
-              backgroundColor: Colors.deepOrangeAccent,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
+  Widget _appBar() {
+    return isSelection
+        ? AppBar(
+            backgroundColor: Colors.deepOrangeAccent,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                isSelection = false;
+                selected = List<bool>(widget.imageList.length);
+                setState(() {});
+              },
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.delete),
                 onPressed: () {
+                  int k = 0;
+                  for (int i = 0; i < selected.length; i++) {
+                    if (selected[i] == true) {
+                      widget.imageList.removeAt(i + k);
+                      k--;
+                    }
+                  }
                   isSelection = false;
                   selected = List<bool>(widget.imageList.length);
+                  if (widget.imageList.isEmpty) {
+                    Navigator.of(context).pop();
+                  }
                   setState(() {});
                 },
-              ),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    int k = 0;
-                    for (int i = 0; i < selected.length; i++) {
-                      if (selected[i] == true) {
-                        widget.imageList.removeAt(i + k);
-                        k--;
-                      }
-                    }
-                    isSelection = false;
-                    selected = List<bool>(widget.imageList.length);
-                    if (widget.imageList.isEmpty) {
-                      Navigator.of(context).pop();
-                    }
-                    setState(() {});
-                  },
-                )
-              ],
-            )
-          : AppBar(
-              backgroundColor: Colors.deepOrangeAccent,
-              title: Text(
-                'Selected images',
-                style: GoogleFonts.amaranth(),
-              ),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.picture_as_pdf),
-                    onPressed: () async {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return AlertDialog(
-                              content: Row(
-                                children: <Widget>[
-                                  Text('Preparing document, please wait   '),
-                                  CircularProgressIndicator(),
-                                ],
-                              ),
-                            );
-                          });
-                      String filename = await pdfServices
-                          .createPdfFromImages(widget.imageList);
-                      Navigator.of(context).pop();
-                      if (filename == null) return;
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(
-                              builder: (context) => ViewPdf(
-                                    documentPath: filename,
-                                  )))
-                          .then((value) => Navigator.of(context).pop());
-                    })
-              ],
+              )
+            ],
+          )
+        : AppBar(
+            backgroundColor: Colors.deepOrangeAccent,
+            title: Text(
+              'Selected images',
+              style: GoogleFonts.amaranth(),
             ),
-      body: Container(
-        child: GridView.builder(
-            itemCount: widget.imageList.length,
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            itemBuilder: (context, i) {
-              return DragTarget(
-                // onWillAccept: (File file) {
-                //   return true;
-                // },
-                // onAccept: (File file) {
-                //   widget.imageList.remove(file);
-                // },
-                onLeave: (file) {
-                  print('onLeave $i');
-                  print(file);
-                },
-                onAccept: (file) {
-                  print('onAccept $i');
-                  print(file);
-                },
-                onWillAccept: (file) {
-                  print('onWillAccept $i');
-                  print(file);
-                  return true;
-                },
-                builder: (context, incomingData, outgoingData) => Draggable(
-                  data: widget.imageList[i],
-                  maxSimultaneousDrags: 1,
-                  onDragCompleted: () {
-                    print('Drag Complete $i');
-                  },
-                  onDragEnd: (file) {
-                    print('Drag End $i');
-                    print(file.wasAccepted);
-                    print(incomingData);
-                    print(outgoingData);
-                  },
-                  feedback: Opacity(
-                    opacity: 0.7,
-                    child: Material(
-                      child: Container(
-                        height: 200,
-                        color: Colors.orange,
-                        child: Image.file(
-                          widget.imageList[i],
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                  child: GestureDetector(
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.picture_as_pdf),
+                  onPressed: () async {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Row(
+                              children: <Widget>[
+                                Text('Preparing document, please wait   '),
+                                CircularProgressIndicator(),
+                              ],
+                            ),
+                          );
+                        });
+                    String filename =
+                        await pdfServices.createPdfFromImages(widget.imageList);
+                    Navigator.of(context).pop();
+                    if (filename == null) return;
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                            builder: (context) => ViewPdf(
+                                  documentPath: filename,
+                                )))
+                        .then((value) => Navigator.of(context).pop());
+                  })
+            ],
+          );
+  }
+
+  Widget _floatingButton() {
+    return SpeedDial(
+      animatedIcon: AnimatedIcons.menu_close,
+      curve: Curves.easeInSine,
+      backgroundColor: Colors.deepOrange,
+      overlayColor: Colors.orangeAccent,
+      overlayOpacity: 0.4,
+      children: [
+        SpeedDialChild(
+          label: 'Take pictures using Camera',
+          labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+          labelBackgroundColor: Colors.deepOrange,
+          child: Icon(Icons.photo_camera),
+          onTap: () {
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => CameraScreen()))
+            //     .then((images) {
+            //   print(images);
+            //   if (images.length == 0) return;
+            //   Navigator.of(context)
+            //       .push(MaterialPageRoute(
+            //           builder: (context) => PreviewPage(imageList: images)))
+            //       .then((_) {
+            //     setState(() {
+            //       files = handler.allFiles();
+            //       files.sort((a, b) => b.path.compareTo(a.path));
+            //       if (files != null && files.isNotEmpty) {
+            //         selected = List<bool>(files.length);
+            //         filesPresent = true;
+            //       }
+            //     });
+            //   });
+            // });
+          },
+        ),
+        SpeedDialChild(
+          label: 'Import images from Gallery',
+          labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+          labelBackgroundColor: Colors.deepOrange,
+          child: Icon(Icons.add_photo_alternate),
+          onTap: () async {
+            // await imageServices.pickImages().then((imagesList) {
+            //   print(imagesList);
+            //   if (imagesList != null && imagesList.isNotEmpty) {
+            //     setState(() {
+            //       images = imagesList;
+            //     });
+            //     Navigator.of(context)
+            //         .push(MaterialPageRoute(
+            //             builder: (context) => PreviewPage(
+            //                   imageList: images,
+            //                 )))
+            //         .then((_) {
+            //       setState(() {
+            //         files = handler.allFiles();
+            //         files.sort((a, b) => b.path.compareTo(a.path));
+            //         if (files != null && files.isNotEmpty) {
+            //           selected = List<bool>(files.length);
+            //           filesPresent = true;
+            //         }
+            //       });
+            //     });
+            //   }
+            // });
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+        onWillPop: () {
+          if (isSelection) {
+            isSelection = false;
+            selected = List<bool>(widget.imageList.length);
+            setState(() {});
+            return;
+          } else {
+            Navigator.of(context).pop();
+            return;
+          }
+        },
+        child: Scaffold(
+          appBar: _appBar(),
+          body: Container(
+            child: GridView.builder(
+                itemCount: widget.imageList.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemBuilder: (context, i) {
+                  return GestureDetector(
                     onTap: () {
                       if (isSelection) {
                         setState(() {
@@ -159,7 +200,7 @@ class _PreviewPageState extends State<PreviewPage> {
                         // getImageEditor(widget.imageList[i]);
                       }
                     },
-                    onDoubleTap: () {
+                    onLongPress: () {
                       setState(() {
                         selected[i] = selected[i] == true ? false : true;
                         isSelection = true;
@@ -176,78 +217,10 @@ class _PreviewPageState extends State<PreviewPage> {
                         fit: BoxFit.contain,
                       ),
                     ),
-                  ),
-                ),
-              );
-            }),
-      ),
-      floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.menu_close,
-        curve: Curves.easeInSine,
-        backgroundColor: Colors.deepOrange,
-        overlayColor: Colors.orangeAccent,
-        overlayOpacity: 0.4,
-        children: [
-          SpeedDialChild(
-            label: 'Take pictures using Camera',
-            labelStyle: TextStyle(fontSize: 15, color: Colors.white),
-            labelBackgroundColor: Colors.deepOrange,
-            child: Icon(Icons.photo_camera),
-            onTap: () {
-              // Navigator.of(context)
-              //     .push(MaterialPageRoute(builder: (context) => CameraScreen()))
-              //     .then((images) {
-              //   print(images);
-              //   if (images.length == 0) return;
-              //   Navigator.of(context)
-              //       .push(MaterialPageRoute(
-              //           builder: (context) => PreviewPage(imageList: images)))
-              //       .then((_) {
-              //     setState(() {
-              //       files = handler.allFiles();
-              //       files.sort((a, b) => b.path.compareTo(a.path));
-              //       if (files != null && files.isNotEmpty) {
-              //         selected = List<bool>(files.length);
-              //         filesPresent = true;
-              //       }
-              //     });
-              //   });
-              // });
-            },
+                  );
+                }),
           ),
-          SpeedDialChild(
-            label: 'Import images from Gallery',
-            labelStyle: TextStyle(fontSize: 15, color: Colors.white),
-            labelBackgroundColor: Colors.deepOrange,
-            child: Icon(Icons.add_photo_alternate),
-            onTap: () async {
-              // await imageServices.pickImages().then((imagesList) {
-              //   print(imagesList);
-              //   if (imagesList != null && imagesList.isNotEmpty) {
-              //     setState(() {
-              //       images = imagesList;
-              //     });
-              //     Navigator.of(context)
-              //         .push(MaterialPageRoute(
-              //             builder: (context) => PreviewPage(
-              //                   imageList: images,
-              //                 )))
-              //         .then((_) {
-              //       setState(() {
-              //         files = handler.allFiles();
-              //         files.sort((a, b) => b.path.compareTo(a.path));
-              //         if (files != null && files.isNotEmpty) {
-              //           selected = List<bool>(files.length);
-              //           filesPresent = true;
-              //         }
-              //       });
-              //     });
-              //   }
-              // });
-            },
-          ),
-        ],
-      ),
-    );
+          floatingActionButton: _floatingButton(),
+        ));
   }
 }
