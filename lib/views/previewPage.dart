@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:get_pdf/services/imageServices.dart';
+import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/editorPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/pdfServices.dart';
@@ -113,25 +115,12 @@ class _PreviewPageState extends State<PreviewPage> {
           labelBackgroundColor: Colors.deepOrange,
           child: Icon(Icons.photo_camera),
           onTap: () {
-            // Navigator.of(context)
-            //     .push(MaterialPageRoute(builder: (context) => CameraScreen()))
-            //     .then((images) {
-            //   print(images);
-            //   if (images.length == 0) return;
-            //   Navigator.of(context)
-            //       .push(MaterialPageRoute(
-            //           builder: (context) => PreviewPage(imageList: images)))
-            //       .then((_) {
-            //     setState(() {
-            //       files = handler.allFiles();
-            //       files.sort((a, b) => b.path.compareTo(a.path));
-            //       if (files != null && files.isNotEmpty) {
-            //         selected = List<bool>(files.length);
-            //         filesPresent = true;
-            //       }
-            //     });
-            //   });
-            // });
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => CameraScreen()))
+                .then((images) {
+              widget.imageList.addAll(images);
+              setState(() {});
+            });
           },
         ),
         SpeedDialChild(
@@ -140,29 +129,10 @@ class _PreviewPageState extends State<PreviewPage> {
           labelBackgroundColor: Colors.deepOrange,
           child: Icon(Icons.add_photo_alternate),
           onTap: () async {
-            // await imageServices.pickImages().then((imagesList) {
-            //   print(imagesList);
-            //   if (imagesList != null && imagesList.isNotEmpty) {
-            //     setState(() {
-            //       images = imagesList;
-            //     });
-            //     Navigator.of(context)
-            //         .push(MaterialPageRoute(
-            //             builder: (context) => PreviewPage(
-            //                   imageList: images,
-            //                 )))
-            //         .then((_) {
-            //       setState(() {
-            //         files = handler.allFiles();
-            //         files.sort((a, b) => b.path.compareTo(a.path));
-            //         if (files != null && files.isNotEmpty) {
-            //           selected = List<bool>(files.length);
-            //           filesPresent = true;
-            //         }
-            //       });
-            //     });
-            //   }
-            // });
+            await ImageServices().pickImages().then((images) {
+              widget.imageList.addAll(images);
+              setState(() {});
+            });
           },
         ),
       ],
