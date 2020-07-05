@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_pdf/services/imageServices.dart';
+import 'package:get_pdf/utils/constants.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/editorPage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
 
@@ -88,12 +90,20 @@ class _PreviewPageState extends State<PreviewPage> {
                         });
                     String filename =
                         await pdfServices.createPdfFromImages(widget.imageList);
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    bool darkPdf = prefs.getBool(Constants.darkPdf);
+                    bool mobileView = prefs.getBool(Constants.mobileView);
+                    bool spacing = prefs.getBool(Constants.autoSpacing);
                     Navigator.of(context).pop();
                     if (filename == null) return;
                     Navigator.of(context)
                         .push(MaterialPageRoute(
                             builder: (context) => ViewPdf(
                                   documentPath: filename,
+                                  darkPdf: darkPdf,
+                                  mobileView: mobileView,
+                                  spacing: spacing,
                                 )))
                         .then((value) => Navigator.of(context).pop());
                   })

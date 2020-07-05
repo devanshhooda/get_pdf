@@ -12,6 +12,8 @@ class _SettingsPageState extends State<SettingsPage> {
   double _value = 0;
   SharedPreferences prefs;
 
+  bool darkPdf = false, mobileView = false, spacing = false;
+
   @override
   void initState() {
     initSP();
@@ -79,6 +81,52 @@ class _SettingsPageState extends State<SettingsPage> {
                     max: 5,
                   )),
             ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Text('pdf Viewer Settings'),
+            ),
+            Row(children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text('DarkPDF:'),
+              ),
+              Switch(
+                value: darkPdf,
+                onChanged: (value) async {
+                  darkPdf = !darkPdf;
+                  await prefs.setBool(Constants.darkPdf, darkPdf);
+                  setState(() {});
+                },
+              ),
+            ]),
+            Row(children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text('MobileView:'),
+              ),
+              Switch(
+                value: mobileView,
+                onChanged: (value) async {
+                  mobileView = !mobileView;
+                  await prefs.setBool(Constants.mobileView, mobileView);
+                  setState(() {});
+                },
+              ),
+            ]),
+            Row(children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text('Spacing:'),
+              ),
+              Switch(
+                value: spacing,
+                onChanged: (value) async {
+                  spacing = !spacing;
+                  await prefs.setBool(Constants.autoSpacing, spacing);
+                  setState(() {});
+                },
+              )
+            ]),
           ],
         ),
       ),
@@ -98,6 +146,9 @@ class _SettingsPageState extends State<SettingsPage> {
   initSP() async {
     prefs = await SharedPreferences.getInstance();
     int resol = prefs.getInt(Constants.cameraResolution) ?? 2;
+    darkPdf = prefs.getBool(Constants.darkPdf) ?? false;
+    mobileView = prefs.getBool(Constants.mobileView) ?? false;
+    spacing = prefs.getBool(Constants.autoSpacing) ?? false;
     setState(() {
       _value = resol.toDouble();
     });

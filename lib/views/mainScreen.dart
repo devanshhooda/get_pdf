@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
+import 'package:get_pdf/utils/constants.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/settingsPage.dart';
@@ -359,10 +360,11 @@ class _MainScreenState extends State<MainScreen> {
           });
         } else {
           String filePath = files[i].path;
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ViewPdf(
-                    documentPath: filePath,
-                  )));
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => ViewPdf(
+          //           documentPath: filePath,
+          //         )));
+          navigate2view(filePath);
         }
       },
       onLongPress: () {
@@ -410,10 +412,11 @@ class _MainScreenState extends State<MainScreen> {
             });
           } else {
             String filePath = files[i].path;
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ViewPdf(
-                      documentPath: filePath,
-                    )));
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (context) => ViewPdf(
+            //           documentPath: filePath,
+            //         )));
+            navigate2view(filePath);
           }
         },
         onLongPress: () {
@@ -462,6 +465,22 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  void navigate2view(String filePath) async {
+    if (prefs == null) {
+      prefs = await SharedPreferences.getInstance();
+    }
+    bool darkPdf = prefs.getBool(Constants.darkPdf);
+    bool mobileView = prefs.getBool(Constants.mobileView);
+    bool spacing = prefs.getBool(Constants.autoSpacing);
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ViewPdf(
+              documentPath: filePath,
+              darkPdf: darkPdf,
+              mobileView: mobileView,
+              spacing: spacing,
+            )));
   }
 
   deleteFiles() async {

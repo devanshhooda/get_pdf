@@ -13,4 +13,7 @@ class Constants {
     'Max'
   ];
   static String cameraResolution = 'resolution';
+  static String darkPdf = 'darkPdf';
+  static String mobileView = 'swipeHorizontal';
+  static String autoSpacing = 'autoSpacing';
 }
