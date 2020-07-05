@@ -361,10 +361,6 @@ class _MainScreenState extends State<MainScreen> {
           });
         } else {
           String filePath = files[i].path;
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => ViewPdf(
-          //           documentPath: filePath,
-          //         )));
           navigate2view(filePath);
         }
       },
@@ -413,10 +409,6 @@ class _MainScreenState extends State<MainScreen> {
             });
           } else {
             String filePath = files[i].path;
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) => ViewPdf(
-            //           documentPath: filePath,
-            //         )));
             navigate2view(filePath);
           }
         },
@@ -472,9 +464,9 @@ class _MainScreenState extends State<MainScreen> {
     if (prefs == null) {
       prefs = await SharedPreferences.getInstance();
     }
-    bool darkPdf = prefs.getBool(Constants.darkPdf);
-    bool mobileView = prefs.getBool(Constants.mobileView);
-    bool spacing = prefs.getBool(Constants.autoSpacing);
+    bool darkPdf = prefs.getBool(Constants.darkPdf) ?? false;
+    bool mobileView = prefs.getBool(Constants.mobileView) ?? false;
+    bool spacing = prefs.getBool(Constants.autoSpacing) ?? true;
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ViewPdf(
               documentPath: filePath,

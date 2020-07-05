@@ -97,15 +97,15 @@ class _PreviewPageState extends State<PreviewPage> {
                     bool spacing = prefs.getBool(Constants.autoSpacing);
                     Navigator.of(context).pop();
                     if (filename == null) return;
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
                             builder: (context) => ViewPdf(
                                   documentPath: filename,
                                   darkPdf: darkPdf,
                                   mobileView: mobileView,
                                   spacing: spacing,
-                                )))
-                        .then((value) => Navigator.of(context).pop());
+                                )),
+                        ModalRoute.withName('/'));
                   })
             ],
           );

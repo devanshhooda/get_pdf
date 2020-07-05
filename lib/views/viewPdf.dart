@@ -39,97 +39,6 @@ class _ViewPdfState extends State<ViewPdf> {
               onPressed: () {
                 ShareExtend.share(widget.documentPath, "pdf");
               })
-          // Container(
-          //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-          //   child: PopupMenuButton(
-          //       icon: Icon(Icons.more_vert),
-          //       onSelected: (i) {
-          //         if (i == 0) {
-          //           ShareExtend.share(widget.documentPath, "pdf");
-          //         }
-          //         // else if (i == 1) {
-          //         //   print('Switch to dark pdf');
-          //         //   setState(() {
-          //         //     darkPdf = !darkPdf;
-          //         //   });
-          //         // } else if (i == 2) {
-          //         //   print('Mobile View');
-          //         //   setState(() {
-          //         //     mobileView = !mobileView;
-          //         //   });
-          //         // } else if (i == 3) {
-          //         //   print('Spacing');
-          //         //   setState(() {
-          //         //     spacing = !spacing;
-          //         //   });
-          //         // }
-          //       },
-          //       itemBuilder: (context) => [
-          //             PopupMenuItem(
-          //               value: 0,
-          //               child: Row(
-          //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //                 children: <Widget>[
-          //                   Text(
-          //                     'Share',
-          //                   ),
-          //                   Icon(
-          //                     Icons.share,
-          //                     size: 15,
-          //                   )
-          //                 ],
-          //               ),
-          //             ),
-          //             PopupMenuItem(
-          //                 value: 1,
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //                   children: <Widget>[
-          //                     Text(
-          //                       'Dark PDF',
-          //                     ),
-          //                     Switch(
-          //                         value: darkPdf,
-          //                         onChanged: (val) {
-          //                           darkPdf = val;
-          //                           setState(() {});
-          //                         })
-          //                   ],
-          //                 )),
-          //             PopupMenuItem(
-          //                 value: 2,
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //                   children: <Widget>[
-          //                     Text(
-          //                       'Mobile View',
-          //                     ),
-          //                     Switch(
-          //                         value: mobileView,
-          //                         onChanged: (val) {
-          //                           mobileView = val;
-          //                           setState(() {});
-          //                         })
-          //                   ],
-          //                 )),
-          //             PopupMenuItem(
-          //                 value: 3,
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //                   children: <Widget>[
-          //                     Text(
-          //                       'Spacing',
-          //                     ),
-          //                     Switch(
-          //                         value: spacing,
-          //                         onChanged: (val) {
-          //                           spacing = val;
-          //                           setState(() {});
-          //                         })
-          //                   ],
-          //                 )),
-          //           ]),
-          // )
         ],
       ),
       body: Stack(
@@ -171,12 +80,12 @@ class _ViewPdfState extends State<ViewPdf> {
             child: Container(
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
+                  color: widget.spacing ? Colors.white : Colors.black,
+                  borderRadius: BorderRadius.circular(10)),
               child: Text(
                 totalPages != null ? '${pageNo + 1}/$totalPages' : '',
                 style: TextStyle(
-                  color: Colors.black,
-                ),
+                    color: widget.spacing ? Colors.black : Colors.white),
               ),
             ),
           )

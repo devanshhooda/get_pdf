@@ -12,7 +12,7 @@ class _SettingsPageState extends State<SettingsPage> {
   double _value = 0;
   SharedPreferences prefs;
 
-  bool darkPdf = false, mobileView = false, spacing = false;
+  bool darkPdf = false, mobileView = false, spacing = true;
 
   @override
   void initState() {
@@ -83,50 +83,60 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             Padding(
               padding: EdgeInsets.all(20),
-              child: Text('pdf Viewer Settings'),
+              child: Text(
+                'PDF viewer settings :',
+                textScaleFactor: 1.4,
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
             ),
-            Row(children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Text('DarkPDF:'),
-              ),
-              Switch(
-                value: darkPdf,
-                onChanged: (value) async {
-                  darkPdf = !darkPdf;
-                  await prefs.setBool(Constants.darkPdf, darkPdf);
-                  setState(() {});
-                },
-              ),
-            ]),
-            Row(children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Text('MobileView:'),
-              ),
-              Switch(
-                value: mobileView,
-                onChanged: (value) async {
-                  mobileView = !mobileView;
-                  await prefs.setBool(Constants.mobileView, mobileView);
-                  setState(() {});
-                },
-              ),
-            ]),
-            Row(children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Text('Spacing:'),
-              ),
-              Switch(
-                value: spacing,
-                onChanged: (value) async {
-                  spacing = !spacing;
-                  await prefs.setBool(Constants.autoSpacing, spacing);
-                  setState(() {});
-                },
-              )
-            ]),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text('Dark PDF'),
+                  ),
+                  Switch(
+                    value: darkPdf,
+                    onChanged: (value) async {
+                      darkPdf = !darkPdf;
+                      await prefs.setBool(Constants.darkPdf, darkPdf);
+                      setState(() {});
+                    },
+                  ),
+                ]),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text('Mobile View'),
+                  ),
+                  Switch(
+                    value: mobileView,
+                    onChanged: (value) async {
+                      mobileView = !mobileView;
+                      await prefs.setBool(Constants.mobileView, mobileView);
+                      setState(() {});
+                    },
+                  ),
+                ]),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text('Spacing'),
+                  ),
+                  Switch(
+                    value: spacing,
+                    onChanged: (value) async {
+                      spacing = !spacing;
+                      await prefs.setBool(Constants.autoSpacing, spacing);
+                      setState(() {});
+                    },
+                  )
+                ]),
           ],
         ),
       ),
