@@ -24,9 +24,22 @@ class FileHandling {
 
   File getFile({String name}) {
     if (homeDirectory == null) return null;
-    var postfixString = DateTime.now().millisecondsSinceEpoch.toString();
+    String postfixString = '';
+    // postfixString = DateTime.now().millisecondsSinceEpoch.toString();
+    // yyyymmdd hhmmss
+    var time = DateTime.now();
+    postfixString +=
+        int2str(time.year) + int2str(time.month) + int2str(time.day);
+    postfixString += ' ';
+    postfixString +=
+        int2str(time.hour) + int2str(time.minute) + int2str(time.second);
     if (name == null) name = Constants.base + postfixString + '.pdf';
     return homeDirectory.childFile(name);
+  }
+
+  String int2str(int n) {
+    if (n < 10) return '0' + n.toString();
+    return n.toString();
   }
 
   File getTempFile({String name}) {
