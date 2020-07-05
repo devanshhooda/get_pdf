@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
@@ -248,7 +249,7 @@ class _MainScreenState extends State<MainScreen> {
           setState(() {});
           return;
         } else {
-          Navigator.of(context).pop();
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           return;
         }
       },
