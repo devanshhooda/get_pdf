@@ -23,6 +23,7 @@ dependencies:
   shared_preferences: ^0.5.7+3
   flutter_speed_dial: ^1.2.5
   image_editor: ^0.7.0
+  image_cropper: ^1.2.3
 
 dev_dependencies:
   flutter_test:
