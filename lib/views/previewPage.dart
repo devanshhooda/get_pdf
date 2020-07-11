@@ -187,13 +187,9 @@ class _PreviewPageState extends State<PreviewPage> {
                         Navigator.of(context)
                             .push(MaterialPageRoute(
                                 builder: (context) =>
-                                    EditImage(widget.imageList[i])))
-                            .then((imageFile) {
-                          if (imageFile != null) {
-                            widget.imageList
-                                .replaceRange(i, i + 1, [imageFile]);
-                            setState(() {});
-                          }
+                                    EditImage(widget.imageList, i)))
+                            .then((data) {
+                          setState(() {});
                         });
                       }
                     },

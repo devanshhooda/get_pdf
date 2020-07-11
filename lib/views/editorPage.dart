@@ -9,22 +9,31 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_editor/image_editor.dart';
 
 class EditImage extends StatefulWidget {
-  final File image;
-  EditImage(this.image);
+  final List<File> images;
+  final int index;
+  EditImage(this.images, this.index);
   EditImageState createState() => EditImageState();
 }
 
 class EditImageState extends State<EditImage> {
   FileHandling _fileHandling = FileHandling();
+  List<File> imageList;
   Uint8List imageData;
+  int idx;
   bool changed = false;
+  bool changedAny = false;
 
   @override
   void initState() {
     //editorOption.addOption(ClipOption(x: 0, y: 0, width: 750, height: 300));
     //editorOption.outputFormat = OutputFormat.png(88);
     _fileHandling.initSystem();
-    imageData = widget.image.readAsBytesSync();
+    idx = widget.index;
+    imageList = List<File>();
+    widget.images.forEach((file) {
+      imageList.add(File(file.path));
+    });
+    imageData = widget.images[idx].readAsBytesSync();
     super.initState();
   }
 
@@ -36,7 +45,7 @@ class EditImageState extends State<EditImage> {
         MaterialButton(
             child: Text('Done'),
             onPressed: () {
-              if (changed) {
+              if (changedAny) {
                 showDialog(
                     context: context,
                     child: AlertDialog(
@@ -44,9 +53,15 @@ class EditImageState extends State<EditImage> {
                       actions: <Widget>[
                         FlatButton(
                             onPressed: () async {
-                              File imageFile = await saveImage();
+                              if (changed) {
+                                File imageFile = await saveImage();
+                                imageList
+                                    .replaceRange(idx, idx + 1, [imageFile]);
+                              }
                               Navigator.of(context).pop();
-                              Navigator.of(context).pop(imageFile);
+                              widget.images
+                                  .replaceRange(0, imageList.length, imageList);
+                              Navigator.of(context).pop();
                             },
                             child: Text('Yes')),
                         FlatButton(
@@ -89,6 +104,7 @@ class EditImageState extends State<EditImage> {
         color: Colors.orange,
         onPressed: () async {
           changed = true;
+          changedAny = true;
           if (i == 0) {
             revertChanges();
           } else if (i == 1) {
@@ -109,7 +125,7 @@ class EditImageState extends State<EditImage> {
             doEditing(editOption);
           } else if (i == 5) {
             File croppedImage = await ImageCropper.cropImage(
-                sourcePath: widget.image.path,
+                sourcePath: imageList[idx].path,
                 aspectRatioPresets: [
                   CropAspectRatioPreset.square,
                   CropAspectRatioPreset.ratio3x2,
@@ -126,7 +142,8 @@ class EditImageState extends State<EditImage> {
                 iosUiSettings: IOSUiSettings(
                   minimumAspectRatio: 1.0,
                 ));
-            imageData = croppedImage.readAsBytesSync();
+            if (croppedImage != null)
+              imageData = croppedImage.readAsBytesSync();
           }
         });
   }
@@ -136,7 +153,27 @@ class EditImageState extends State<EditImage> {
     return Scaffold(
       appBar: _appBar(context),
       body: Center(
-          child: imageData == null ? Container() : Image.memory(imageData)),
+          child: imageData == null
+              ? Container()
+              : GestureDetector(
+                  child: Image.memory(imageData),
+                  onHorizontalDragEnd: (details) {
+                    if (changed) {
+                      saveImage().then((file) {
+                        imageList.replaceRange(idx, idx + 1, [file]);
+                        if (details.primaryVelocity > 0 && idx > 0) idx--;
+                        if (details.primaryVelocity < 0 &&
+                            imageList.length > idx + 1) idx++;
+                        revertChanges();
+                      });
+                    } else {
+                      if (details.primaryVelocity > 0 && idx > 0) idx--;
+                      if (details.primaryVelocity < 0 &&
+                          imageList.length > idx + 1) idx++;
+                      revertChanges();
+                    }
+                  },
+                )),
       bottomSheet: _bottomBar(),
     );
   }
@@ -151,7 +188,7 @@ class EditImageState extends State<EditImage> {
 
   void revertChanges() {
     setState(() {
-      imageData = widget.image.readAsBytesSync();
+      imageData = imageList[idx].readAsBytesSync();
       changed = false;
     });
   }
