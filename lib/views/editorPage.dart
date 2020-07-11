@@ -126,6 +126,7 @@ class EditImageState extends State<EditImage> {
                 iosUiSettings: IOSUiSettings(
                   minimumAspectRatio: 1.0,
                 ));
+            imageData = croppedImage.readAsBytesSync();
           }
         });
   }
