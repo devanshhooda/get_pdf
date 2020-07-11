@@ -65,7 +65,7 @@ class CameraScreenState extends State<CameraScreen> {
                 backgroundColor: Colors.deepOrange,
                 radius: 30,
                 backgroundImage: images.length > 0
-                    ? AssetImage(images[images.length - 1].path)
+                    ? FileImage(images[images.length - 1])
                     : null,
                 child: Text(
                   images.length.toString(),
