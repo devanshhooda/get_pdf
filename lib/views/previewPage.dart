@@ -67,6 +67,12 @@ class _PreviewPageState extends State<PreviewPage> {
           )
         : AppBar(
             backgroundColor: Colors.deepOrangeAccent,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             title: Text(
               'Selected images',
               style: GoogleFonts.amaranth(),
