@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/utils/constants.dart';
+import 'package:get_pdf/utils/sizeConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -45,13 +46,13 @@ class CameraScreenState extends State<CameraScreen> {
               child: CameraPreview(cameraController),
             ),
             Positioned(
-              bottom: 825,
-              left: 20,
+              bottom: SizeConfig.safeBlockVertical * 92,
+              left: SizeConfig.safeBlockHorizontal * 5,
               child: CircleAvatar(
                 backgroundColor: Colors.black26,
-                radius: 20,
+                radius: SizeConfig.font_size * 3,
                 child: IconButton(
-                    iconSize: 25,
+                    iconSize: SizeConfig.font_size * 3.4,
                     icon: Icon(Icons.keyboard_arrow_down),
                     onPressed: () {
                       Navigator.pop(context, images);
@@ -59,31 +60,29 @@ class CameraScreenState extends State<CameraScreen> {
               ),
             ),
             Positioned(
-              top: 850,
-              left: 50,
+              top: SizeConfig.safeBlockVertical * 95,
+              left: SizeConfig.safeBlockHorizontal * 13,
               child: CircleAvatar(
                 backgroundColor: Colors.deepOrange,
-                radius: 30,
+                radius: SizeConfig.font_size * 4.5,
                 backgroundImage: images.length > 0
                     ? FileImage(images[images.length - 1])
                     : null,
                 child: Text(
                   images.length.toString(),
-                  textScaleFactor: 1.5,
                   style: TextStyle(
-                    color: Colors.white,
-                  ),
+                      color: Colors.white, fontSize: SizeConfig.font_size * 4),
                 ),
               ),
             ),
             Positioned(
-              top: 850,
-              left: 180,
+              top: SizeConfig.safeBlockVertical * 95,
+              left: SizeConfig.safeBlockHorizontal * 43,
               child: CircleAvatar(
                 backgroundColor: Colors.deepOrange,
-                radius: 30,
+                radius: SizeConfig.font_size * 4.5,
                 child: IconButton(
-                  iconSize: 30,
+                  iconSize: SizeConfig.font_size * 4,
                   color: Colors.white,
                   icon: Icon(Icons.camera),
                   onPressed: () async {
@@ -105,14 +104,14 @@ class CameraScreenState extends State<CameraScreen> {
               ),
             ),
             Positioned(
-              top: 850,
-              left: 310,
+              top: SizeConfig.safeBlockVertical * 95,
+              left: SizeConfig.safeBlockHorizontal * 73,
               child: CircleAvatar(
                 backgroundColor: Colors.deepOrange,
-                radius: 30,
+                radius: SizeConfig.font_size * 4.5,
                 child: IconButton(
                   color: Colors.white,
-                  iconSize: 25,
+                  iconSize: SizeConfig.font_size * 4,
                   icon: Icon(Icons.done),
                   onPressed: () {
                     Navigator.pop(context, images);

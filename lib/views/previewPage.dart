@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_pdf/services/imageServices.dart';
 import 'package:get_pdf/utils/constants.dart';
+import 'package:get_pdf/utils/sizeConfig.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/editorPage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -66,7 +67,6 @@ class _PreviewPageState extends State<PreviewPage> {
             ],
           )
         : AppBar(
-            backgroundColor: Colors.deepOrangeAccent,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
@@ -103,15 +103,14 @@ class _PreviewPageState extends State<PreviewPage> {
                     bool spacing = prefs.getBool(Constants.autoSpacing);
                     Navigator.of(context).pop();
                     if (filename == null) return;
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => ViewPdf(
-                                  documentPath: filename,
-                                  darkPdf: darkPdf,
-                                  mobileView: mobileView,
-                                  spacing: spacing,
-                                )),
-                        ModalRoute.withName('/'));
+                    Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) => ViewPdf(
+                              documentPath: filename,
+                              darkPdf: darkPdf,
+                              mobileView: mobileView,
+                              spacing: spacing,
+                            )));
+                    // ModalRoute.withName('/'));
                   })
             ],
           );
@@ -127,7 +126,8 @@ class _PreviewPageState extends State<PreviewPage> {
       children: [
         SpeedDialChild(
           label: 'Take pictures using Camera',
-          labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+          labelStyle: TextStyle(
+              fontSize: SizeConfig.font_size * 2.2, color: Colors.white),
           labelBackgroundColor: Colors.deepOrange,
           child: Icon(Icons.photo_camera),
           onTap: () {
@@ -141,7 +141,8 @@ class _PreviewPageState extends State<PreviewPage> {
         ),
         SpeedDialChild(
           label: 'Import images from Gallery',
-          labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+          labelStyle: TextStyle(
+              fontSize: SizeConfig.font_size * 2.2, color: Colors.white),
           labelBackgroundColor: Colors.deepOrange,
           child: Icon(Icons.add_photo_alternate),
           onTap: () async {
@@ -200,8 +201,8 @@ class _PreviewPageState extends State<PreviewPage> {
                       });
                     },
                     child: Container(
-                      margin: EdgeInsets.all(5),
-                      padding: EdgeInsets.all(2),
+                      margin: EdgeInsets.all(SizeConfig.font_size * 0.7),
+                      padding: EdgeInsets.all(SizeConfig.font_size * 0.3),
                       color: isSelection && selected[i] == true
                           ? Colors.orange
                           : Colors.white,

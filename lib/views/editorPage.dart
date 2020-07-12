@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_pdf/services/fileHandling.dart';
+import 'package:get_pdf/utils/sizeConfig.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_editor/image_editor.dart';
 
@@ -25,8 +27,8 @@ class EditImageState extends State<EditImage> {
 
   @override
   void initState() {
-    //editorOption.addOption(ClipOption(x: 0, y: 0, width: 750, height: 300));
-    //editorOption.outputFormat = OutputFormat.png(88);
+    // editorOption.addOption(ClipOption(x: 0, y: 0, width: 750, height: 300));
+    // editorOption.outputFormat = OutputFormat.png(88);
     _fileHandling.initSystem();
     idx = widget.index;
     imageList = List<File>();
@@ -39,9 +41,11 @@ class EditImageState extends State<EditImage> {
 
   Widget _appBar(BuildContext context) {
     return AppBar(
-      title: Text('Edit image'),
+      title: Text(
+        'Edit image',
+        style: GoogleFonts.amaranth(),
+      ),
       actions: <Widget>[
-        // editButton(Icons.crop_rotate, 5),
         MaterialButton(
             child: Text('Done'),
             onPressed: () {
@@ -81,26 +85,26 @@ class EditImageState extends State<EditImage> {
 
   Widget _bottomBar() {
     return Container(
-      height: 50,
+      height: SizeConfig.blockSizeVertical * 5,
       color: Colors.black54,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          editButton(Icons.settings_backup_restore, 0),
-          editButton(Icons.flip, 3),
-          editButton(Icons.swap_vert, 4),
-          editButton(Icons.crop_rotate, 5),
-          editButton(Icons.rotate_left, 1),
-          editButton(Icons.rotate_right, 2),
+          _editButton(Icons.settings_backup_restore, 0),
+          _editButton(Icons.flip, 3),
+          _editButton(Icons.swap_vert, 4),
+          _editButton(Icons.crop_rotate, 5),
+          _editButton(Icons.rotate_left, 1),
+          _editButton(Icons.rotate_right, 2),
         ],
       ),
     );
   }
 
-  Widget editButton(IconData iconData, int i) {
+  Widget _editButton(IconData iconData, int i) {
     return IconButton(
         icon: Icon(iconData),
-        iconSize: 30,
+        iconSize: SizeConfig.font_size * 4.5,
         color: Colors.orange,
         onPressed: () async {
           changed = true;
@@ -174,7 +178,8 @@ class EditImageState extends State<EditImage> {
                     }
                   },
                 )),
-      bottomSheet: _bottomBar(),
+      // bottomSheet: _bottomBar(),
+      bottomNavigationBar: _bottomBar(),
     );
   }
 

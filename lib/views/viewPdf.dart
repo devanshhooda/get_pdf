@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:get_pdf/utils/sizeConfig.dart';
 import 'package:share_extend/share_extend.dart';
 
 class ViewPdf extends StatefulWidget {
@@ -75,10 +76,10 @@ class _ViewPdfState extends State<ViewPdf> {
             },
           ),
           Positioned(
-            top: 35,
-            left: 35,
+            top: SizeConfig.safeBlockVertical * 5,
+            left: SizeConfig.safeBlockHorizontal * 10,
             child: Container(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(SizeConfig.font_size * 0.7),
               decoration: BoxDecoration(
                   color: widget.spacing == true ? Colors.white : Colors.black,
                   borderRadius: BorderRadius.circular(10)),

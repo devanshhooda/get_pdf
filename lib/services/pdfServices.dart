@@ -19,12 +19,9 @@ class PdfServices {
             pageFormat: PdfPageFormat.a4,
             build: (pw.Context context) {
               return pw.Container(
-                child:
-                    // pw.Column(children: <pw.Widget>[
-                    pw.Image(pdfImage),
-                //   pw.Footer(
-                //       title: pw.Text('GetPDF'), trailing: pw.Text('Make PDF'))
-                // ])
+                height: double.infinity,
+                width: double.infinity,
+                child: pw.Image(pdfImage, fit: pw.BoxFit.fill),
               );
             }));
       }

@@ -1,9 +1,9 @@
 class Constants {
   static String root = '/storage/emulated/0/';
-  static String home = 'GetPDF';
+  static String home = 'Indocanner';
   static String temp = '.temp';
   static String greet = 'Hello World!';
-  static String base = 'GetPDF ';
+  static String base = 'Indocanner ';
   static List<String> resolutions = [
     'Low',
     'Medium',

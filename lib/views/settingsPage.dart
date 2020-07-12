@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_pdf/utils/sizeConfig.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_pdf/utils/constants.dart';
@@ -12,7 +13,7 @@ class _SettingsPageState extends State<SettingsPage> {
   double _value = 0;
   SharedPreferences prefs;
 
-  bool darkPdf = false, mobileView = false, spacing = true;
+  bool darkPdf = false, mobileView = false, spacing = true, fitImages = true;
 
   @override
   void initState() {
@@ -31,25 +32,28 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       body: Container(
+        height: SizeConfig.screenHeight,
+        width: SizeConfig.screenWidth,
         child: ListView(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(SizeConfig.font_size * 3),
               child: Text(
                 'Camera Quality : ${Constants.resolutions[_value.floor()]}',
-                textScaleFactor: 1.4,
-                style: TextStyle(fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: SizeConfig.font_size * 3),
               ),
             ),
             Container(
-              height: 70,
+              height: SizeConfig.blockSizeVertical * 7.5,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   gradient: LinearGradient(
                       colors: [Colors.grey, Colors.blueGrey[400]],
                       begin: Alignment.bottomLeft,
                       end: Alignment.topRight)),
-              margin: EdgeInsets.all(20), // don't change this ever
+              margin: EdgeInsets.all(SizeConfig.font_size * 2.5),
               child: SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                       activeTrackColor: Colors.red[700],
@@ -82,61 +86,101 @@ class _SettingsPageState extends State<SettingsPage> {
                   )),
             ),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(SizeConfig.font_size * 3),
               child: Text(
                 'PDF viewer settings :',
-                textScaleFactor: 1.4,
-                style: TextStyle(fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: SizeConfig.font_size * 3),
               ),
             ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text('Dark PDF'),
-                  ),
-                  Switch(
-                    value: darkPdf,
-                    onChanged: (value) async {
-                      darkPdf = !darkPdf;
-                      await prefs.setBool(Constants.darkPdf, darkPdf);
-                      setState(() {});
-                    },
-                  ),
-                ]),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text('Mobile View'),
-                  ),
-                  Switch(
-                    value: mobileView,
-                    onChanged: (value) async {
-                      mobileView = !mobileView;
-                      await prefs.setBool(Constants.mobileView, mobileView);
-                      setState(() {});
-                    },
-                  ),
-                ]),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text('Spacing'),
-                  ),
-                  Switch(
-                    value: spacing,
-                    onChanged: (value) async {
-                      spacing = !spacing;
-                      await prefs.setBool(Constants.autoSpacing, spacing);
-                      setState(() {});
-                    },
-                  )
-                ]),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.safeBlockHorizontal * 10),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(SizeConfig.font_size * 2.5),
+                      child: Text('Dark PDF'),
+                    ),
+                    Switch(
+                      value: darkPdf,
+                      onChanged: (value) async {
+                        darkPdf = !darkPdf;
+                        await prefs.setBool(Constants.darkPdf, darkPdf);
+                        setState(() {});
+                      },
+                    ),
+                  ]),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.safeBlockHorizontal * 10),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(SizeConfig.font_size * 2.5),
+                      child: Text('Mobile View'),
+                    ),
+                    Switch(
+                      value: mobileView,
+                      onChanged: (value) async {
+                        mobileView = !mobileView;
+                        await prefs.setBool(Constants.mobileView, mobileView);
+                        setState(() {});
+                      },
+                    ),
+                  ]),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.safeBlockHorizontal * 10),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(SizeConfig.font_size * 2.5),
+                      child: Text('Spacing'),
+                    ),
+                    Switch(
+                      value: spacing,
+                      onChanged: (value) async {
+                        spacing = !spacing;
+                        await prefs.setBool(Constants.autoSpacing, spacing);
+                        setState(() {});
+                      },
+                    )
+                  ]),
+            ),
+            Padding(
+              padding: EdgeInsets.all(SizeConfig.font_size * 3),
+              child: Text(
+                'Image settings :',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: SizeConfig.font_size * 3),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.safeBlockHorizontal * 10),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(SizeConfig.font_size * 2.5),
+                      child: Text('Fit images on pages'),
+                    ),
+                    Switch(
+                      value: fitImages,
+                      onChanged: (value) async {
+                        fitImages = !fitImages;
+                      },
+                    )
+                  ]),
+            ),
           ],
         ),
       ),
