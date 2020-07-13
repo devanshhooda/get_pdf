@@ -139,7 +139,7 @@ class _MainScreenState extends State<MainScreen> {
                 .push(MaterialPageRoute(builder: (context) => CameraScreen()))
                 .then((images) {
               print(images);
-              if (images.length == 0) return;
+              if (images == null || images.length == 0) return;
               Navigator.of(context)
                   .push(CupertinoPageRoute(
                       builder: (context) => PreviewPage(imageList: images)))
@@ -513,6 +513,10 @@ class _MainScreenState extends State<MainScreen> {
 
   initFileSystem() async {
     await handler.initSystem().then((value) {
+      if (value == false) {
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        return;
+      }
       handler.deleteTemp();
       setState(() {
         files = handler.allFiles();

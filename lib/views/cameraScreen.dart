@@ -136,7 +136,12 @@ class CameraScreenState extends State<CameraScreen> {
     int resol = prefs.getInt(Constants.cameraResolution) ?? 2;
     cameras = await availableCameras();
     cameraController = CameraController(cameras[0], getResol(resol));
-    await cameraController.initialize();
+    try {
+      await cameraController.initialize();
+    } catch (err) {
+      Navigator.pop(context, null);
+      return;
+    }
     await handler.initSystem();
     setState(() {});
   }
