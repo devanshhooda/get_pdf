@@ -177,6 +177,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       value: fitImages,
                       onChanged: (value) async {
                         fitImages = !fitImages;
+                        await prefs.setBool(Constants.fitImages, fitImages);
+                        setState(() {});
                       },
                     )
                   ]),
@@ -202,7 +204,8 @@ class _SettingsPageState extends State<SettingsPage> {
     int resol = prefs.getInt(Constants.cameraResolution) ?? 2;
     darkPdf = prefs.getBool(Constants.darkPdf) ?? false;
     mobileView = prefs.getBool(Constants.mobileView) ?? false;
-    spacing = prefs.getBool(Constants.autoSpacing) ?? false;
+    spacing = prefs.getBool(Constants.autoSpacing) ?? true;
+    fitImages = prefs.getBool(Constants.fitImages) ?? true;
     setState(() {
       _value = resol.toDouble();
     });

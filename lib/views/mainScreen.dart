@@ -124,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
     return SpeedDial(
       animatedIcon: AnimatedIcons.menu_close,
       curve: Curves.easeInSine,
-      backgroundColor: Colors.deepOrange,
+      foregroundColor: Colors.black,
       overlayColor: Colors.orangeAccent,
       overlayOpacity: 0.4,
       children: [

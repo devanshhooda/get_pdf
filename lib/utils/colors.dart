@@ -7,7 +7,9 @@ class ColorUtil {
       primarySwatch: Colors.deepOrange,
       primaryColor: Colors.deepOrange,
       brightness: Brightness.light,
-      // backgroundColor: Colors.white,
+      appBarTheme: AppBarTheme(
+        color: Colors.deepOrange,
+      ),
       textSelectionColor: Colors.purpleAccent,
       floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.deepOrange, foregroundColor: Colors.white),
@@ -25,7 +27,9 @@ class ColorUtil {
       primarySwatch: Colors.deepOrange,
       primaryColor: Colors.deepOrange,
       brightness: Brightness.dark,
-      // backgroundColor: Colors.black,
+      appBarTheme: AppBarTheme(
+        color: Colors.deepOrange,
+      ),
       textSelectionColor: Colors.purpleAccent,
       floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.deepOrange, foregroundColor: Colors.black),

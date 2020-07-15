@@ -1,14 +1,22 @@
 import 'dart:io';
 import 'package:get_pdf/services/fileHandling.dart';
+import 'package:get_pdf/utils/constants.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PdfServices {
   var pdf = pw.Document();
+  SharedPreferences pref;
+  bool fitImages = true;
+
+  PdfServices() {
+    _initSP();
+  }
 
   Future<String> createPdfFromImages(List<File> images) async {
     pdf = pw.Document();
-
+    _checkFitProperty();
     try {
       for (int i = 0; i < images.length; i++) {
         var image = images[i];
@@ -21,7 +29,8 @@ class PdfServices {
               return pw.Container(
                 height: double.infinity,
                 width: double.infinity,
-                child: pw.Image(pdfImage, fit: pw.BoxFit.fill),
+                child: pw.Image(pdfImage,
+                    fit: fitImages ? pw.BoxFit.fill : pw.BoxFit.none),
               );
             }));
       }
@@ -41,5 +50,13 @@ class PdfServices {
     await file.writeAsBytes(pdf.save());
     print('Saved File: ${file.path}');
     return file.path;
+  }
+
+  _checkFitProperty() {
+    fitImages = pref.getBool(Constants.fitImages) ?? true;
+  }
+
+  _initSP() async {
+    pref = await SharedPreferences.getInstance();
   }
 }

@@ -5,7 +5,7 @@ import 'package:get_pdf/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'views/mainScreen.dart';
 
-Future<void> main() async {
+void main() async {
   runApp(MyApp());
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent));

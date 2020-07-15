@@ -16,4 +16,5 @@ class Constants {
   static String darkPdf = 'darkPdf';
   static String mobileView = 'swipeHorizontal';
   static String autoSpacing = 'autoSpacing';
+  static String fitImages = 'fitImages';
 }

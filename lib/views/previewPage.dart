@@ -36,7 +36,6 @@ class _PreviewPageState extends State<PreviewPage> {
   Widget _appBar() {
     return isSelection
         ? AppBar(
-            backgroundColor: Colors.deepOrangeAccent,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
@@ -120,12 +119,12 @@ class _PreviewPageState extends State<PreviewPage> {
     return SpeedDial(
       animatedIcon: AnimatedIcons.menu_close,
       curve: Curves.easeInSine,
-      backgroundColor: Colors.deepOrange,
+      foregroundColor: Colors.black,
       overlayColor: Colors.orangeAccent,
       overlayOpacity: 0.4,
       children: [
         SpeedDialChild(
-          label: 'Take pictures using Camera',
+          label: 'Add pictures using Camera',
           labelStyle: TextStyle(
               fontSize: SizeConfig.font_size * 2.2, color: Colors.white),
           labelBackgroundColor: Colors.deepOrange,
@@ -140,7 +139,7 @@ class _PreviewPageState extends State<PreviewPage> {
           },
         ),
         SpeedDialChild(
-          label: 'Import images from Gallery',
+          label: 'Add images from Gallery',
           labelStyle: TextStyle(
               fontSize: SizeConfig.font_size * 2.2, color: Colors.white),
           labelBackgroundColor: Colors.deepOrange,
@@ -205,7 +204,7 @@ class _PreviewPageState extends State<PreviewPage> {
                       padding: EdgeInsets.all(SizeConfig.font_size * 0.3),
                       color: isSelection && selected[i] == true
                           ? Colors.orange
-                          : Colors.white,
+                          : Colors.grey[400],
                       child: Image.file(
                         widget.imageList[i],
                         fit: BoxFit.contain,
