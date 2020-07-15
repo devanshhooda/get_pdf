@@ -134,6 +134,8 @@ class _PreviewPageState extends State<PreviewPage> {
                 .push(MaterialPageRoute(builder: (context) => CameraScreen()))
                 .then((images) {
               widget.imageList.addAll(images);
+              isSelection = false;
+              selected = List<bool>(widget.imageList.length);
               setState(() {});
             });
           },
@@ -147,6 +149,8 @@ class _PreviewPageState extends State<PreviewPage> {
           onTap: () async {
             await ImageServices().pickImages().then((images) {
               widget.imageList.addAll(images);
+              isSelection = false;
+              selected = List<bool>(widget.imageList.length);
               setState(() {});
             });
           },
