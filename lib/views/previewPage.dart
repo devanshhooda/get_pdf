@@ -86,11 +86,15 @@ class _PreviewPageState extends State<PreviewPage> {
                         builder: (context) {
                           return AlertDialog(
                             content: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Text('Preparing document, please wait   '),
+                                Text('Preparing document..  '),
                                 CircularProgressIndicator(),
                               ],
                             ),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.safeBlockHorizontal * 7,
+                                vertical: SizeConfig.safeBlockVertical * 3),
                           );
                         });
                     String filename =

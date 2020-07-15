@@ -81,13 +81,16 @@ class _ViewPdfState extends State<ViewPdf> {
             child: Container(
               padding: EdgeInsets.all(SizeConfig.font_size * 0.7),
               decoration: BoxDecoration(
-                  color: widget.spacing == true ? Colors.white : Colors.black,
+                  color: (widget.spacing || widget.darkPdf)
+                      ? Colors.white
+                      : Colors.black,
                   borderRadius: BorderRadius.circular(10)),
               child: Text(
                 totalPages != null ? '${pageNo + 1}/$totalPages' : '',
                 style: TextStyle(
-                    color:
-                        widget.spacing == true ? Colors.black : Colors.white),
+                    color: (widget.spacing || widget.darkPdf)
+                        ? Colors.black
+                        : Colors.white),
               ),
             ),
           )
