@@ -17,12 +17,12 @@
         android:left="100dp"
         android:top="500dp" >
         <bitmap
-            android:gravity="fill_horizontal|top"
+            android:gravity="center_horizontal|top"
             android:src="@drawable/fullname" />
     </item>
     <item>
         <bitmap
             android:gravity="bottom|center"
-            android:src="@drawable/version" />
+            android:src="@drawable/company" />
     </item>
 </layer-list>
