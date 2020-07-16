@@ -360,25 +360,15 @@ class _MainScreenState extends State<MainScreen> {
                         child: Icon(Icons.done),
                       ),
                     )
-                  // : CircleAvatar(
-                  //     backgroundColor: Colors.black,
-                  //     radius: SizeConfig.font_size * 5,
-                  //     child: docThumbnail != null ? docThumbnail : null,
-                  //     backgroundImage: docThumbnail == null
-                  //         ? AssetImage('assets/fileIcon.png')
-                  //         : null,
-                  //   ),
                   : Container(
-                      height: 140,
-                      padding: EdgeInsets.all(20),
+                      height: SizeConfig.safeBlockVertical * 16,
                       decoration: BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.circular(40),
-                          image: docThumbnail == null
-                              ? DecorationImage(
-                                  image: AssetImage('assets/fileIcon.png'))
-                              : null),
-                      child: docThumbnail != null ? docThumbnail : null,
+                          image: DecorationImage(
+                              image: docThumbnail == null
+                                  ? AssetImage('assets/fileIcon.png')
+                                  : docThumbnail.image)),
                     ),
               footer: Text(
                 '${files[i].path.split('/').removeLast()}',
@@ -409,7 +399,10 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   listViewContent(int i) {
-    var docThumbnail = Image.file(handler.thumbPath(files[i].path));
+    var docThumbnail = Image.file(
+      handler.thumbPath(files[i].path),
+      fit: BoxFit.fill,
+    );
     return Container(
       margin: EdgeInsets.all(SizeConfig.font_size * 1),
       padding: EdgeInsets.symmetric(
@@ -427,14 +420,14 @@ class _MainScreenState extends State<MainScreen> {
             ? CircleAvatar(
                 radius: SizeConfig.font_size * 3.5,
                 child: Icon(Icons.done),
+                backgroundColor: Colors.black,
               )
             : CircleAvatar(
                 backgroundColor: Colors.transparent,
                 radius: SizeConfig.font_size * 3.5,
-                child: docThumbnail != null ? docThumbnail : null,
                 backgroundImage: docThumbnail == null
                     ? AssetImage('assets/fileIcon.png')
-                    : null,
+                    : docThumbnail.image,
               ),
         title: Text(
           '${files[i].path.split('/').removeLast()}',
