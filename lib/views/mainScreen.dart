@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
+import 'package:get_pdf/services/pdfServices.dart';
 import 'package:get_pdf/utils/constants.dart';
 import 'package:get_pdf/utils/sizeConfig.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
@@ -335,6 +336,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   gridViewContent(int i) {
+    File file = handler.thumbPath(files[i].path);
     return GestureDetector(
       child: Container(
           margin: EdgeInsets.all(SizeConfig.font_size * 1),
@@ -358,7 +360,7 @@ class _MainScreenState extends State<MainScreen> {
                         child: Icon(Icons.done),
                       ),
                     )
-                  : Image.file(handler.thumbPath(files[i].path)),
+                  : file.existsSync() ? Image.file(file) : null,
               footer: Text(
                 '${files[i].path.split('/').removeLast()}',
                 style: TextStyle(
@@ -521,6 +523,9 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         files = handler.allFiles();
         files.sort((a, b) => b.path.compareTo(a.path));
+        PdfServices().createThumbnails(files[2]).then((value) {
+          setState(() {});
+        });
         if (files != null && files.isNotEmpty) {
           selected = List<bool>(files.length);
           filesPresent = true;
