@@ -101,9 +101,10 @@ class _PreviewPageState extends State<PreviewPage> {
                         await pdfServices.createPdfFromImages(widget.imageList);
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
-                    bool darkPdf = prefs.getBool(Constants.darkPdf);
-                    bool mobileView = prefs.getBool(Constants.mobileView);
-                    bool spacing = prefs.getBool(Constants.autoSpacing);
+                    bool darkPdf = prefs.getBool(Constants.darkPdf) ?? false;
+                    bool mobileView =
+                        prefs.getBool(Constants.mobileView) ?? false;
+                    bool spacing = prefs.getBool(Constants.autoSpacing) ?? true;
                     Navigator.of(context).pop();
                     if (filename == null) return;
                     Navigator.of(context).push(CupertinoPageRoute(

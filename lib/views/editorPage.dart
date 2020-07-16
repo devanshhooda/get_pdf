@@ -24,6 +24,7 @@ class EditImageState extends State<EditImage> {
   int idx;
   bool changed = false;
   bool changedAny = false;
+  PageController controller;
 
   @override
   void initState() {
@@ -36,6 +37,9 @@ class EditImageState extends State<EditImage> {
       imageList.add(File(file.path));
     });
     imageData = widget.images[idx].readAsBytesSync();
+    controller = PageController(
+      initialPage: idx,
+    );
     super.initState();
   }
 
@@ -152,32 +156,38 @@ class EditImageState extends State<EditImage> {
         });
   }
 
+  List<Widget> pageChildren() {
+    List<Widget> child = [];
+    for (int i = 0; i < imageList.length; i++) {
+      child.add(i == idx ? Image.memory(imageData) : Image.file(imageList[i]));
+    }
+    return child;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
       body: Center(
-          child: imageData == null
-              ? Container()
-              : GestureDetector(
-                  child: Image.memory(imageData),
-                  onHorizontalDragEnd: (details) {
-                    if (changed) {
-                      saveImage().then((file) {
-                        imageList.replaceRange(idx, idx + 1, [file]);
-                        if (details.primaryVelocity > 0 && idx > 0) idx--;
-                        if (details.primaryVelocity < 0 &&
-                            imageList.length > idx + 1) idx++;
-                        revertChanges();
-                      });
-                    } else {
-                      if (details.primaryVelocity > 0 && idx > 0) idx--;
-                      if (details.primaryVelocity < 0 &&
-                          imageList.length > idx + 1) idx++;
-                      revertChanges();
-                    }
-                  },
-                )),
+        child: PageView(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          onPageChanged: (value) {
+            print(value);
+            if (changed) {
+              saveImage().then((file) {
+                imageList.replaceRange(idx, idx + 1, [file]);
+                idx = value;
+                revertChanges();
+              });
+            } else {
+              idx = value;
+              revertChanges();
+            }
+          },
+          children: pageChildren(),
+        ),
+      ),
       // bottomSheet: _bottomBar(),
       bottomNavigationBar: _bottomBar(),
     );

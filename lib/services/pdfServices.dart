@@ -30,7 +30,7 @@ class PdfServices {
                 height: double.infinity,
                 width: double.infinity,
                 child: pw.Image(pdfImage,
-                    fit: fitImages ? pw.BoxFit.fill : pw.BoxFit.none),
+                    fit: fitImages ? pw.BoxFit.fill : pw.BoxFit.contain),
               );
             }));
       }
