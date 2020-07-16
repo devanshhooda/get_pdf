@@ -335,6 +335,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   gridViewContent(int i) {
+    var docThumbnail =
+        Image.file(handler.thumbPath(files[i].path), fit: BoxFit.fill);
     return GestureDetector(
       child: Container(
           margin: EdgeInsets.all(SizeConfig.font_size * 1),
@@ -358,7 +360,26 @@ class _MainScreenState extends State<MainScreen> {
                         child: Icon(Icons.done),
                       ),
                     )
-                  : Image.file(handler.thumbPath(files[i].path)),
+                  // : CircleAvatar(
+                  //     backgroundColor: Colors.black,
+                  //     radius: SizeConfig.font_size * 5,
+                  //     child: docThumbnail != null ? docThumbnail : null,
+                  //     backgroundImage: docThumbnail == null
+                  //         ? AssetImage('assets/fileIcon.png')
+                  //         : null,
+                  //   ),
+                  : Container(
+                      height: 140,
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(40),
+                          image: docThumbnail == null
+                              ? DecorationImage(
+                                  image: AssetImage('assets/fileIcon.png'))
+                              : null),
+                      child: docThumbnail != null ? docThumbnail : null,
+                    ),
               footer: Text(
                 '${files[i].path.split('/').removeLast()}',
                 style: TextStyle(
@@ -388,6 +409,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   listViewContent(int i) {
+    var docThumbnail = Image.file(handler.thumbPath(files[i].path));
     return Container(
       margin: EdgeInsets.all(SizeConfig.font_size * 1),
       padding: EdgeInsets.symmetric(
@@ -407,8 +429,12 @@ class _MainScreenState extends State<MainScreen> {
                 child: Icon(Icons.done),
               )
             : CircleAvatar(
+                backgroundColor: Colors.transparent,
                 radius: SizeConfig.font_size * 3.5,
-                backgroundImage: AssetImage('assets/fileIcon.png'),
+                child: docThumbnail != null ? docThumbnail : null,
+                backgroundImage: docThumbnail == null
+                    ? AssetImage('assets/fileIcon.png')
+                    : null,
               ),
         title: Text(
           '${files[i].path.split('/').removeLast()}',
