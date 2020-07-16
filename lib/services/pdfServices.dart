@@ -35,19 +35,21 @@ class PdfServices {
             }));
       }
 
-      return await savePdfFile();
+      return await savePdfFile(images[0]);
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<String> savePdfFile() async {
+  Future<String> savePdfFile(File image) async {
     FileHandling handler = FileHandling();
     await handler.initSystem();
     File file = handler.getFile();
     if (file == null) return null; // Error
     await file.writeAsBytes(pdf.save());
+    File thmb = handler.getThumbFile(file.path);
+    thmb.writeAsBytesSync(image.readAsBytesSync()); // TODO: resize image
     print('Saved File: ${file.path}');
     return file.path;
   }

@@ -358,7 +358,7 @@ class _MainScreenState extends State<MainScreen> {
                         child: Icon(Icons.done),
                       ),
                     )
-                  : null,
+                  : Image.file(handler.thumbPath(files[i].path)),
               footer: Text(
                 '${files[i].path.split('/').removeLast()}',
                 style: TextStyle(

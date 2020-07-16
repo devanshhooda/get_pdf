@@ -8,6 +8,7 @@ class FileHandling {
   final FILE.FileSystem fs = const LocalFileSystem();
   FILE.Directory homeDirectory;
   FILE.Directory tempDirectory;
+  FILE.Directory thmbDirectory;
 
   FileHandling();
 
@@ -18,6 +19,8 @@ class FileHandling {
       homeDirectory = await root.childDirectory(Constants.home).create();
       tempDirectory =
           await homeDirectory.childDirectory(Constants.temp).create();
+      thmbDirectory =
+          await homeDirectory.childDirectory(Constants.thumb).create();
     }
     return storagePermission;
   }
@@ -47,6 +50,27 @@ class FileHandling {
     var postfixString = DateTime.now().millisecondsSinceEpoch.toString();
     if (name == null) name = Constants.base + postfixString + '.pdf';
     return tempDirectory.childFile(name);
+  }
+
+  File getThumbFile(String name) {
+    if (thmbDirectory == null) return null;
+    List<String> parts = name.split('/').removeLast().split('.');
+    String thumbName = '';
+    for (int i = 0; i < parts.length - 1; i++) {
+      thumbName += parts[i];
+    }
+    thumbName += '.jpg';
+    return thmbDirectory.childFile(thumbName);
+  }
+
+  File thumbPath(String name) {
+    List<String> parts = name.split('/').removeLast().split('.');
+    String thumbName = '';
+    for (int i = 0; i < parts.length - 1; i++) {
+      thumbName += parts[i];
+    }
+    thumbName += '.jpg';
+    return File(thmbDirectory.path + '/' + thumbName);
   }
 
   Future<void> deleteTemp() async {
