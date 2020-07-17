@@ -7,11 +7,11 @@ import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
 import 'package:get_pdf/utils/constants.dart';
 import 'package:get_pdf/utils/sizeConfig.dart';
+import 'package:get_pdf/views/aboutPage.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/settingsPage.dart';
 import 'package:get_pdf/views/viewPdf.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -111,7 +111,8 @@ class _MainScreenState extends State<MainScreen> {
                     bottomRight: Radius.circular(25))),
             title: Text(
               "Indocanner",
-              style: GoogleFonts.anton(
+              style: TextStyle(
+                  fontFamily: 'Anton',
                   fontStyle: FontStyle.italic,
                   letterSpacing: 5,
                   fontSize: SizeConfig.font_size * 4),
@@ -214,13 +215,11 @@ class _MainScreenState extends State<MainScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Text(
-                        'Dark mode',
-                        style: GoogleFonts.amaranth(
-                            textStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: SizeConfig.font_size * 3.2)),
-                      ),
+                      Text('Dark mode',
+                          style: TextStyle(
+                              fontFamily: 'MedriendaOne',
+                              fontWeight: FontWeight.bold,
+                              fontSize: SizeConfig.font_size * 3)),
                       Switch(
                           value: isDark,
                           onChanged: (val) async {
@@ -231,8 +230,8 @@ class _MainScreenState extends State<MainScreen> {
                     ],
                   ),
                   drawerButton(buttonName: 'Settings', icon: Icons.settings),
-                  drawerButton(buttonName: 'Share App', icon: Icons.share),
-                  drawerButton(buttonName: 'Rate App', icon: Icons.star),
+                  // drawerButton(buttonName: 'Share App', icon: Icons.share),
+                  // drawerButton(buttonName: 'Rate App', icon: Icons.star),
                   drawerButton(buttonName: 'About Us', icon: Icons.info),
                 ],
               ),
@@ -277,13 +276,11 @@ class _MainScreenState extends State<MainScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
-                                'Your files :',
-                                style: GoogleFonts.amaranth(
-                                    textStyle: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: SizeConfig.font_size * 2.7)),
-                              ),
+                              Text('Your files :',
+                                  style: TextStyle(
+                                      fontFamily: 'MedriendaOne',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: SizeConfig.font_size * 2.7)),
                               FlatButton(
                                   onPressed: () {
                                     isListView = !isListView;
@@ -476,17 +473,20 @@ class _MainScreenState extends State<MainScreen> {
           if (buttonName == 'Settings') {
             Navigator.of(context)
                 .push(CupertinoPageRoute(builder: (context) => SettingsPage()));
+          } else if (buttonName == 'About Us') {
+            Navigator.of(context)
+                .push(CupertinoPageRoute(builder: (context) => AboutPage()));
           }
         },
         child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(
-                '$buttonName',
-                style: GoogleFonts.amaranth(
-                    textStyle: TextStyle(fontSize: SizeConfig.font_size * 3)),
-              ),
+              Text('$buttonName',
+                  style: TextStyle(
+                    fontSize: SizeConfig.font_size * 3,
+                    fontFamily: 'MedriendaOne',
+                  )),
               Icon(
                 icon,
               ),

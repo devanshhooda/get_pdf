@@ -7,7 +7,6 @@ import 'package:get_pdf/utils/constants.dart';
 import 'package:get_pdf/utils/sizeConfig.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/editorPage.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
@@ -74,7 +73,9 @@ class _PreviewPageState extends State<PreviewPage> {
             ),
             title: Text(
               'Selected images',
-              style: GoogleFonts.amaranth(),
+              style: TextStyle(
+                fontFamily: 'MedriendaOne',
+              ),
             ),
             actions: <Widget>[
               IconButton(
