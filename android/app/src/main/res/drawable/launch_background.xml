@@ -15,10 +15,16 @@
     <item 
         android:right="100dp"
         android:left="100dp"
-        android:top="500dp" >
+        android:top="450dp" >
         <bitmap
             android:gravity="center_horizontal|top"
             android:src="@drawable/fullname" />
+    </item>
+    <item 
+        android:bottom="20dp" >
+        <bitmap
+            android:gravity="bottom|center"
+            android:src="@drawable/from" />
     </item>
     <item>
         <bitmap
