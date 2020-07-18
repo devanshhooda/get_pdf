@@ -7,7 +7,7 @@
     <item 
         android:right="100dp"
         android:left="100dp"
-        android:top="200dp" >
+        android:top="250dp" >
         <bitmap
             android:gravity="center_horizontal|top"
             android:src="@drawable/icon" />
@@ -15,7 +15,7 @@
     <item 
         android:right="100dp"
         android:left="100dp"
-        android:top="450dp" >
+        android:top="500dp" >
         <bitmap
             android:gravity="center_horizontal|top"
             android:src="@drawable/fullname" />
