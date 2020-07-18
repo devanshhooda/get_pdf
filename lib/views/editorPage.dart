@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/utils/sizeConfig.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_editor/image_editor.dart';
 
@@ -47,7 +45,9 @@ class EditImageState extends State<EditImage> {
     return AppBar(
       title: Text(
         'Edit image',
-        style: GoogleFonts.amaranth(),
+        style: TextStyle(
+            fontFamily: 'MedriendaOne',
+          ),
       ),
       actions: <Widget>[
         MaterialButton(

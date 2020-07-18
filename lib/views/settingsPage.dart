@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_pdf/utils/sizeConfig.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_pdf/utils/constants.dart';
 
@@ -28,7 +27,9 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Colors.deepOrange,
         title: Text(
           'Settings',
-          style: GoogleFonts.amaranth(),
+          style: TextStyle(
+            fontFamily: 'MedriendaOne',
+          ),
         ),
       ),
       body: Container(
