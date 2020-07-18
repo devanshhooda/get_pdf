@@ -21,12 +21,13 @@
             android:src="@drawable/fullname" />
     </item>
     <item 
-        android:bottom="20dp" >
+        android:bottom="50dp" >
         <bitmap
             android:gravity="bottom|center"
             android:src="@drawable/from" />
     </item>
-    <item>
+    <item
+        android:bottom="10dp" >
         <bitmap
             android:gravity="bottom|center"
             android:src="@drawable/company" />

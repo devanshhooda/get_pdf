@@ -18,7 +18,7 @@ class AboutPage extends StatelessWidget {
       fontFamily: 'MedriendaOne',
       fontStyle: FontStyle.italic,
       fontSize: SizeConfig.font_size * 3.5,
-      color: Colors.purple);
+      color: Colors.deepPurple);
 
   Widget _backButton(BuildContext context) {
     return Padding(
@@ -54,8 +54,8 @@ class AboutPage extends StatelessWidget {
             ),
             Expanded(
               flex: 10,
-              child: Container(
-                margin: EdgeInsets.symmetric(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
                     horizontal: SizeConfig.safeBlockHorizontal * 15),
                 child: ListView(
                   children: <Widget>[
@@ -111,7 +111,11 @@ class AboutPage extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             gradient: LinearGradient(
-                                colors: [Colors.deepOrange, Colors.green],
+                                colors: [
+                                  Colors.deepOrange,
+                                  Colors.white,
+                                  Colors.green
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight)),
                         child: Text(
@@ -123,7 +127,7 @@ class AboutPage extends StatelessWidget {
                               color: Colors.black),
                         )),
                     Text(
-                        'in context of      ATMANIRBHAR BHARAT        by two Computer Science undergraduates:',
+                        'in context of      ATMANIRBHAR BHARAT       by two Computer Science undergraduates:',
                         style: _normalTextStyle),
                     Padding(
                       padding: EdgeInsets.only(

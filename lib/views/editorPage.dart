@@ -46,8 +46,8 @@ class EditImageState extends State<EditImage> {
       title: Text(
         'Edit image',
         style: TextStyle(
-            fontFamily: 'MedriendaOne',
-          ),
+          fontFamily: 'MedriendaOne',
+        ),
       ),
       actions: <Widget>[
         MaterialButton(
@@ -169,23 +169,26 @@ class EditImageState extends State<EditImage> {
     return Scaffold(
       appBar: _appBar(context),
       body: Center(
-        child: PageView(
-          controller: controller,
-          scrollDirection: Axis.horizontal,
-          onPageChanged: (value) {
-            print(value);
-            if (changed) {
-              saveImage().then((file) {
-                imageList.replaceRange(idx, idx + 1, [file]);
+        child: Hero(
+          tag: idx,
+          child: PageView(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            onPageChanged: (value) {
+              print(value);
+              if (changed) {
+                saveImage().then((file) {
+                  imageList.replaceRange(idx, idx + 1, [file]);
+                  idx = value;
+                  revertChanges();
+                });
+              } else {
                 idx = value;
                 revertChanges();
-              });
-            } else {
-              idx = value;
-              revertChanges();
-            }
-          },
-          children: pageChildren(),
+              }
+            },
+            children: pageChildren(),
+          ),
         ),
       ),
       // bottomSheet: _bottomBar(),

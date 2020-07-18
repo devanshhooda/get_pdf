@@ -187,37 +187,40 @@ class _PreviewPageState extends State<PreviewPage> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2),
                 itemBuilder: (context, i) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (isSelection) {
+                  return Hero(
+                    tag: i,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (isSelection) {
+                          setState(() {
+                            selected[i] = selected[i] == true ? false : true;
+                          });
+                        } else {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditImage(widget.imageList, i)))
+                              .then((data) {
+                            setState(() {});
+                          });
+                        }
+                      },
+                      onLongPress: () {
                         setState(() {
                           selected[i] = selected[i] == true ? false : true;
+                          isSelection = true;
                         });
-                      } else {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(
-                                builder: (context) =>
-                                    EditImage(widget.imageList, i)))
-                            .then((data) {
-                          setState(() {});
-                        });
-                      }
-                    },
-                    onLongPress: () {
-                      setState(() {
-                        selected[i] = selected[i] == true ? false : true;
-                        isSelection = true;
-                      });
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(SizeConfig.font_size * 0.7),
-                      padding: EdgeInsets.all(SizeConfig.font_size * 0.3),
-                      color: isSelection && selected[i] == true
-                          ? Colors.orange
-                          : Colors.grey[400],
-                      child: Image.file(
-                        widget.imageList[i],
-                        fit: BoxFit.contain,
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(SizeConfig.font_size * 0.7),
+                        padding: EdgeInsets.all(SizeConfig.font_size * 0.3),
+                        color: isSelection && selected[i] == true
+                            ? Colors.orange
+                            : Colors.grey[400],
+                        child: Image.file(
+                          widget.imageList[i],
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   );
