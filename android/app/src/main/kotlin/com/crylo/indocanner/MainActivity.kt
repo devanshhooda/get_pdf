@@ -1,4 +1,4 @@
-package com.example.get_pdf
+package com.crylo.indocanner
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -64,14 +64,21 @@ class AboutPage extends StatelessWidget {
                       style: _appNameStyle,
                     ),
                     Text(
-                      'is a document scanning app which is purely Made In India and can be used to keep your documents/notes safe in your device as a PDF.',
+                      'is a document scanning app which is purely Made In India and can be used to keep your documents/notes safe in your device as a PDF document.\n',
                       style: _normalTextStyle,
                     ),
                     RichText(
                         text: TextSpan(
-                            text: 'It offers the features like ',
+                            text: 'It offers the features like selecting ',
                             style: _normalTextStyle,
                             children: [
+                          TextSpan(
+                              text: 'multiple images',
+                              style: TextStyle(color: Colors.blue[700])),
+                          TextSpan(
+                              text:
+                                  ' from camera/storage and converting them into PDF document, and also ',
+                              style: _normalTextStyle),
                           TextSpan(
                             text: 'deleting',
                             style: TextStyle(color: Colors.pink),

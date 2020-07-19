@@ -45,7 +45,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget _appBar() {
     return isSelection
         ? AppBar(
-            backgroundColor: Colors.deepOrangeAccent,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
@@ -104,7 +103,6 @@ class _MainScreenState extends State<MainScreen> {
             ],
           )
         : AppBar(
-            backgroundColor: Colors.deepOrangeAccent,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
@@ -370,7 +368,7 @@ class _MainScreenState extends State<MainScreen> {
               footer: Text(
                 '${files[i].path.split('/').removeLast()}',
                 style: TextStyle(
-                    color: Colors.white, fontSize: SizeConfig.font_size * 2.5),
+                    color: Colors.white, fontSize: SizeConfig.font_size * 2),
               ),
               child: Text(''))),
       onTap: () {
@@ -429,7 +427,7 @@ class _MainScreenState extends State<MainScreen> {
         title: Text(
           '${files[i].path.split('/').removeLast()}',
           style: TextStyle(
-              color: Colors.white, fontSize: SizeConfig.font_size * 2.7),
+              color: Colors.white, fontSize: SizeConfig.font_size * 2.5),
         ),
         onTap: () {
           if (isSelection) {
