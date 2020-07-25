@@ -8,6 +8,7 @@ import 'package:get_pdf/utils/sizeConfig.dart';
 import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/editorPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image/image.dart' as Img;
 import '../services/pdfServices.dart';
 import 'viewPdf.dart';
 
@@ -79,25 +80,50 @@ class _PreviewPageState extends State<PreviewPage> {
             ),
             actions: <Widget>[
               IconButton(
-                  icon: Icon(Icons.picture_as_pdf),
+                icon: Icon(Icons.picture_as_pdf),
+                onPressed: () async {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text('Preparing document..  '),
+                              CircularProgressIndicator(),
+                            ],
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: SizeConfig.safeBlockHorizontal * 7,
+                              vertical: SizeConfig.safeBlockVertical * 3),
+                        );
+                      });
+                  String filename =
+                      await pdfServices.createPdfFromImages(widget.imageList);
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  bool darkPdf = prefs.getBool(Constants.darkPdf) ?? false;
+                  bool mobileView =
+                      prefs.getBool(Constants.mobileView) ?? false;
+                  bool spacing = prefs.getBool(Constants.autoSpacing) ?? true;
+                  Navigator.of(context).pop();
+                  if (filename == null) return;
+                  Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => ViewPdf(
+                            documentPath: filename,
+                            darkPdf: darkPdf,
+                            mobileView: mobileView,
+                            spacing: spacing,
+                          )));
+                  // ModalRoute.withName('/'));
+                },
+              ),
+              IconButton(
+                  icon: Icon(Icons.sentiment_very_satisfied),
                   onPressed: () async {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Text('Preparing document..  '),
-                                CircularProgressIndicator(),
-                              ],
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: SizeConfig.safeBlockHorizontal * 7,
-                                vertical: SizeConfig.safeBlockVertical * 3),
-                          );
-                        });
+                    CircularProgressIndicator();
+                    mergeImages(0, 1, vp: 80, hp: 40);
                     String filename =
                         await pdfServices.createPdfFromImages(widget.imageList);
                     SharedPreferences prefs =
@@ -228,5 +254,35 @@ class _PreviewPageState extends State<PreviewPage> {
           ),
           floatingActionButton: _floatingButton(),
         ));
+  }
+
+  int max(int x, int y) {
+    return x > y ? x : y;
+  }
+
+  void mergeImages(int idx1, int idx2,
+      {bool light = true, int vp = 20, int hp = 20}) {
+    Img.Image im1 = Img.decodeImage(widget.imageList[idx1].readAsBytesSync());
+    Img.Image im2 = Img.decodeImage(widget.imageList[idx2].readAsBytesSync());
+    int w = max(im1.height, im2.height) + 2 * hp;
+    int h = im1.width + im2.width + 3 * vp;
+    Img.Image merge = Img.Image(w, h);
+    // Fill Background
+    light ? merge.fill(0xFFFFFFFF) : merge.fill(0xFF000000);
+    for (int i = 0; i < im1.width; i++) {
+      for (int j = 0; j < im1.height; j++) {
+        merge.setPixel(j + hp, i + vp, im1.getPixel(i, im1.height - j - 1));
+      }
+    }
+    for (int i = 0; i < im2.width; i++) {
+      for (int j = 0; j < im2.height; j++) {
+        merge.setPixel(j + hp, i + 2 * vp + im1.width,
+            im2.getPixel(i, im2.height - j - 1));
+      }
+    }
+    widget.imageList.removeAt(idx2);
+    widget.imageList[idx1].writeAsBytesSync(Img.encodeJpg(merge));
+    isSelection = false;
+    selected = List<bool>(widget.imageList.length);
   }
 }

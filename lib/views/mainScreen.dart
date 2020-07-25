@@ -7,8 +7,9 @@ import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
 import 'package:get_pdf/utils/constants.dart';
 import 'package:get_pdf/utils/sizeConfig.dart';
+import 'package:get_pdf/views/aadharCameraScreen.dart';
 import 'package:get_pdf/views/aboutPage.dart';
-import 'package:get_pdf/views/cameraScreen.dart';
+//import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/settingsPage.dart';
 import 'package:get_pdf/views/viewPdf.dart';
@@ -135,7 +136,8 @@ class _MainScreenState extends State<MainScreen> {
           child: Icon(Icons.photo_camera),
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => CameraScreen()))
+                .push(MaterialPageRoute(
+                    builder: (context) => AadharCameraScreen()))
                 .then((images) {
               print(images);
               if (images == null || images.length == 0) return;
