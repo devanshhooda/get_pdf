@@ -199,6 +199,14 @@ class AadharCameraScreenState extends State<AadharCameraScreen> {
         .floor();
     int h = ((SizeConfig.aadharHeight / SizeConfig.screenHeight) * photo.width)
         .floor();
+    if (w < h) {
+      x = x + y;
+      y = x - y;
+      x = x - y;
+      w = w + h;
+      h = w - h;
+      w = w - h;
+    }
     Img.Image newImg = Img.copyCrop(photo, y, x, h, w);
     image.writeAsBytesSync(Img.encodeJpg(newImg));
     images.add(image);
