@@ -13,8 +13,9 @@ import '../services/pdfServices.dart';
 import 'viewPdf.dart';
 
 class PreviewPage extends StatefulWidget {
+  final bool isNormalScan;
   final List<File> imageList;
-  PreviewPage({this.imageList});
+  PreviewPage({this.imageList, this.isNormalScan});
   @override
   _PreviewPageState createState() => _PreviewPageState();
 }
@@ -99,6 +100,9 @@ class _PreviewPageState extends State<PreviewPage> {
                               vertical: SizeConfig.safeBlockVertical * 3),
                         );
                       });
+                  if (!widget.isNormalScan) {
+                    mergeImages(0, 1, vp: 80, hp: 40);
+                  }
                   String filename =
                       await pdfServices.createPdfFromImages(widget.imageList);
                   SharedPreferences prefs =
@@ -119,30 +123,9 @@ class _PreviewPageState extends State<PreviewPage> {
                   // ModalRoute.withName('/'));
                 },
               ),
-              IconButton(
-                  icon: Icon(Icons.sentiment_very_satisfied),
-                  onPressed: () async {
-                    CircularProgressIndicator();
-                    mergeImages(0, 1, vp: 80, hp: 40);
-                    String filename =
-                        await pdfServices.createPdfFromImages(widget.imageList);
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    bool darkPdf = prefs.getBool(Constants.darkPdf) ?? false;
-                    bool mobileView =
-                        prefs.getBool(Constants.mobileView) ?? false;
-                    bool spacing = prefs.getBool(Constants.autoSpacing) ?? true;
-                    Navigator.of(context).pop();
-                    if (filename == null) return;
-                    Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) => ViewPdf(
-                              documentPath: filename,
-                              darkPdf: darkPdf,
-                              mobileView: mobileView,
-                              spacing: spacing,
-                            )));
-                    // ModalRoute.withName('/'));
-                  })
+              // IconButton(
+              //     icon: Icon(Icons.sentiment_very_satisfied),
+              //     onPressed: () async {})
             ],
           );
   }

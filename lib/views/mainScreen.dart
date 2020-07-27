@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:get_pdf/models/cameraPair.dart';
 import 'package:get_pdf/services/fileHandling.dart';
 import 'package:get_pdf/services/imageServices.dart';
 import 'package:get_pdf/utils/constants.dart';
 import 'package:get_pdf/utils/sizeConfig.dart';
-import 'package:get_pdf/views/aadharCameraScreen.dart';
 import 'package:get_pdf/views/aboutPage.dart';
-//import 'package:get_pdf/views/cameraScreen.dart';
+import 'package:get_pdf/views/cameraScreen.dart';
 import 'package:get_pdf/views/previewPage.dart';
 import 'package:get_pdf/views/settingsPage.dart';
 import 'package:get_pdf/views/viewPdf.dart';
@@ -136,14 +136,17 @@ class _MainScreenState extends State<MainScreen> {
           child: Icon(Icons.photo_camera),
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(
-                    builder: (context) => AadharCameraScreen()))
-                .then((images) {
-              print(images);
-              if (images == null || images.length == 0) return;
+                .push(MaterialPageRoute(builder: (context) => CameraScreen()))
+                .then((cameraPair) {
+              print(cameraPair.images);
+              if (cameraPair.images == null || cameraPair.images.length == 0)
+                return;
               Navigator.of(context)
                   .push(CupertinoPageRoute(
-                      builder: (context) => PreviewPage(imageList: images)))
+                      builder: (context) => PreviewPage(
+                            imageList: cameraPair.images,
+                            isNormalScan: cameraPair.scanType == 'normal_scan',
+                          )))
                   .then((_) {
                 setState(() {
                   files = handler.allFiles();
