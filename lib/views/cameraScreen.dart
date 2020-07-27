@@ -20,8 +20,6 @@ class CameraScreenState extends State<CameraScreen> {
 
   List<File> images = [];
 
-  // CameraPair cameraPair = new CameraPair()
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

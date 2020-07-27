@@ -12,7 +12,7 @@ class SizeConfig {
   static double safeBlockHorizontal;
   static double safeBlockVertical;
 
-  static double cardRatio = 0.6;
+  static double cardRatio = 0.64;
   static double cardWidth;
   static double cardHeight;
   static double remainingWidth;

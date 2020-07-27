@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PdfServices {
   var pdf = pw.Document();
   SharedPreferences pref;
-  bool fitImages = true;
+  bool fitImages = false;
 
   PdfServices() {
     _initSP();
@@ -55,7 +55,7 @@ class PdfServices {
   }
 
   _checkFitProperty() {
-    fitImages = pref.getBool(Constants.fitImages) ?? true;
+    fitImages = pref.getBool(Constants.fitImages) ?? false;
   }
 
   _initSP() async {

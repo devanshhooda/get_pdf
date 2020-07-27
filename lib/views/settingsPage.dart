@@ -12,7 +12,7 @@ class _SettingsPageState extends State<SettingsPage> {
   double _value = 0;
   SharedPreferences prefs;
 
-  bool darkPdf = false, mobileView = false, spacing = true, fitImages = true;
+  bool darkPdf = false, mobileView = false, spacing = true, fitImages = false;
 
   @override
   void initState() {
@@ -206,7 +206,7 @@ class _SettingsPageState extends State<SettingsPage> {
     darkPdf = prefs.getBool(Constants.darkPdf) ?? false;
     mobileView = prefs.getBool(Constants.mobileView) ?? false;
     spacing = prefs.getBool(Constants.autoSpacing) ?? true;
-    fitImages = prefs.getBool(Constants.fitImages) ?? true;
+    fitImages = prefs.getBool(Constants.fitImages) ?? false;
     setState(() {
       _value = resol.toDouble();
     });
