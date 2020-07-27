@@ -123,9 +123,6 @@ class _PreviewPageState extends State<PreviewPage> {
                   // ModalRoute.withName('/'));
                 },
               ),
-              // IconButton(
-              //     icon: Icon(Icons.sentiment_very_satisfied),
-              //     onPressed: () async {})
             ],
           );
   }

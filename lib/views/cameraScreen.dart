@@ -62,8 +62,7 @@ class CameraScreenState extends State<CameraScreen> {
                     context: context,
                     child: AlertDialog(
                       title: Text('Switch to card scanning ?'),
-                      content:
-                          Text('Your current images and changes will be lost'),
+                      content: Text('Your clicked images will be lost'),
                       actions: <Widget>[
                         FlatButton(
                             onPressed: () {
@@ -74,12 +73,18 @@ class CameraScreenState extends State<CameraScreen> {
                               });
                               Navigator.of(context).pop();
                             },
-                            child: Text('Yes')),
+                            child: Text(
+                              'Yes',
+                              style: TextStyle(color: Colors.red),
+                            )),
                         FlatButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('No'))
+                            child: Text(
+                              'No',
+                              style: TextStyle(color: Colors.green),
+                            ))
                       ],
                     ));
               } else {
@@ -89,10 +94,35 @@ class CameraScreenState extends State<CameraScreen> {
                 });
               }
             } else if (type == 'normal_scan') {
-              setState(() {
-                selectedOption = type;
-                displayText = 'Document Scan';
-              });
+              showDialog(
+                  context: context,
+                  child: AlertDialog(
+                    title: Text('Switch to document scanning ?'),
+                    content: Text('Your clicked image will be lost'),
+                    actions: <Widget>[
+                      FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedOption = type;
+                              displayText = 'Document Scan';
+                              images.clear();
+                            });
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'Yes',
+                            style: TextStyle(color: Colors.red),
+                          )),
+                      FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'No',
+                            style: TextStyle(color: Colors.green),
+                          ))
+                    ],
+                  ));
             } else if (type == 'back') {
               _handleBackButton();
             }
@@ -114,12 +144,18 @@ class CameraScreenState extends State<CameraScreen> {
                     images.clear();
                     Navigator.pop(context, images);
                   },
-                  child: Text('Yes')),
+                  child: Text(
+                    'Yes',
+                    style: TextStyle(color: Colors.red),
+                  )),
               FlatButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('No')),
+                  child: Text(
+                    'No',
+                    style: TextStyle(color: Colors.green),
+                  )),
             ],
           ));
     }
@@ -154,17 +190,17 @@ class CameraScreenState extends State<CameraScreen> {
                           Container(
                             color: darkness,
                             width: SizeConfig.remainingWidth,
-                            height: SizeConfig.aadharHeight,
+                            height: SizeConfig.cardHeight,
                           ),
                           Container(
                             color: Colors.transparent,
-                            width: SizeConfig.aadharWidth,
-                            height: SizeConfig.aadharHeight,
+                            width: SizeConfig.cardWidth,
+                            height: SizeConfig.cardHeight,
                           ),
                           Container(
                             color: darkness,
                             width: SizeConfig.remainingWidth,
-                            height: SizeConfig.aadharHeight,
+                            height: SizeConfig.cardHeight,
                           )
                         ],
                       ),
@@ -317,9 +353,9 @@ class CameraScreenState extends State<CameraScreen> {
     Img.Image photo = Img.decodeImage(image.readAsBytesSync());
     int x = ((SizeConfig.x / SizeConfig.screenWidth) * photo.height).floor();
     int y = ((SizeConfig.y / SizeConfig.screenHeight) * photo.width).floor();
-    int w = ((SizeConfig.aadharWidth / SizeConfig.screenWidth) * photo.height)
+    int w = ((SizeConfig.cardWidth / SizeConfig.screenWidth) * photo.height)
         .floor();
-    int h = ((SizeConfig.aadharHeight / SizeConfig.screenHeight) * photo.width)
+    int h = ((SizeConfig.cardHeight / SizeConfig.screenHeight) * photo.width)
         .floor();
     if (w < h) {
       x = x + y;

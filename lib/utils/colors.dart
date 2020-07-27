@@ -14,11 +14,6 @@ class ColorUtil {
       floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.deepOrange, foregroundColor: Colors.white),
       iconTheme: IconThemeData(color: Colors.black),
-      dividerColor: Colors.white54,
-      popupMenuTheme: PopupMenuThemeData(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
       dialogTheme: DialogTheme(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))));
@@ -34,11 +29,6 @@ class ColorUtil {
       floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.deepOrange, foregroundColor: Colors.black),
       iconTheme: IconThemeData(color: Colors.white),
-      dividerColor: Colors.black12,
-      popupMenuTheme: PopupMenuThemeData(
-          color: Colors.black,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
       dialogTheme: DialogTheme(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))));

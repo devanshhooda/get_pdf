@@ -74,12 +74,18 @@ class _MainScreenState extends State<MainScreen> {
                                   deleteFiles();
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Yes')),
+                                child: Text(
+                                  'Yes',
+                                  style: TextStyle(color: Colors.red),
+                                )),
                             FlatButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('No'))
+                                child: Text(
+                                  'No',
+                                  style: TextStyle(color: Colors.green),
+                                ))
                           ],
                         );
                       });

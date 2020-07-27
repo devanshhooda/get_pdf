@@ -12,9 +12,9 @@ class SizeConfig {
   static double safeBlockHorizontal;
   static double safeBlockVertical;
 
-  static double aadharRatio = 0.6;
-  static double aadharWidth;
-  static double aadharHeight;
+  static double cardRatio = 0.6;
+  static double cardWidth;
+  static double cardHeight;
   static double remainingWidth;
   static int x, y;
 
@@ -38,10 +38,10 @@ class SizeConfig {
 
     font_size = (safeBlockVertical + safeBlockHorizontal) / 2;
 
-    aadharWidth = screenWidth * 0.9;
-    aadharHeight = aadharWidth * aadharRatio;
-    remainingWidth = (screenWidth - aadharWidth) / 2;
+    cardWidth = screenWidth * 0.9;
+    cardHeight = cardWidth * cardRatio;
+    remainingWidth = (screenWidth - cardWidth) / 2;
     x = remainingWidth.floor();
-    y = ((screenHeight - aadharHeight) / 2).floor();
+    y = ((screenHeight - cardHeight) / 2).floor();
   }
 }

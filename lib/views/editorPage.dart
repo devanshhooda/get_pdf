@@ -71,12 +71,16 @@ class EditImageState extends State<EditImage> {
                                   .replaceRange(0, imageList.length, imageList);
                               Navigator.of(context).pop();
                             },
-                            child: Text('Yes')),
+                            child: Text('Yes',
+                                style: TextStyle(color: Colors.green))),
                         FlatButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('No')),
+                            child: Text(
+                              'No',
+                              style: TextStyle(color: Colors.red),
+                            )),
                       ],
                     ));
               } else {
