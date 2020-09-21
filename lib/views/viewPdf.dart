@@ -7,7 +7,11 @@ import 'package:share_extend/share_extend.dart';
 class ViewPdf extends StatefulWidget {
   final String documentPath;
   final bool darkPdf, mobileView, spacing;
-  ViewPdf({this.documentPath, this.darkPdf, this.mobileView, this.spacing});
+  ViewPdf(
+      {@required this.documentPath,
+      this.darkPdf,
+      this.mobileView,
+      this.spacing});
   @override
   _ViewPdfState createState() => _ViewPdfState();
 }

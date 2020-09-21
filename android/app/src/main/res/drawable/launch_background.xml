@@ -5,9 +5,9 @@
 
     <!-- You can insert your own image assets here -->
     <item 
-        android:right="100dp"
-        android:left="100dp"
-        android:top="250dp" >
+        android:right="300dp"
+        android:left="300dp"
+        android:top="200dp" >
         <bitmap
             android:gravity="center_horizontal|top"
             android:src="@drawable/icon" />
